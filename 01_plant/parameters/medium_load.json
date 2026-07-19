@@ -1,0 +1,6 @@
+{
+    "schema_version": "0.1.0",
+    "payload_level": "medium",
+    "J_l": 0.05,
+    "description": "Medium load configuration (J_l = 0.05 kg*m^2, default)"
+}

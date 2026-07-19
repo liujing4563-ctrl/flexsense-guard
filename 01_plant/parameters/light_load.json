@@ -1,0 +1,6 @@
+{
+    "schema_version": "0.1.0",
+    "payload_level": "light",
+    "J_l": 0.02,
+    "description": "Light load configuration (J_l = 0.02 kg*m^2)"
+}
