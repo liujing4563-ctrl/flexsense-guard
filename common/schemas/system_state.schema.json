@@ -41,7 +41,7 @@
             "type": "number",
             "minimum": 0,
             "maximum": 1,
-            "description": "Contact likelihood score [0, 1]; NOT a probability."
+            "description": "Contact evidence score [0, 1]; NOT a probability."
         },
         "operation_mode": {
             "type": "string",
@@ -51,6 +51,13 @@
         "valid_flag": {
             "type": "boolean",
             "description": "Whether the state data is valid"
+        },
+        "reason_codes": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "Traceable reasons for a valid or degraded estimate"
         }
     },
     "required": [
@@ -63,7 +70,8 @@
         "confidence_score",
         "contact_score",
         "operation_mode",
-        "valid_flag"
+        "valid_flag",
+        "reason_codes"
     ],
     "additionalProperties": false
 }

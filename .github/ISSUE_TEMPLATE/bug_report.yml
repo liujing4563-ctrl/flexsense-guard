@@ -1,0 +1,22 @@
+name: 缺陷报告
+description: 记录可复现的代码、模型或文档缺陷
+title: "fix: "
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 问题摘要
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤与预期结果
+      description: 请附配置、随机种子和实际结果；不要提交敏感材料。
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: 影响与建议处理方式
