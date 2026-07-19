@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flexsense-guard"
+version = "0.1.0"
+description = "Trusted virtual force sensing and safety control simulation for flexible robot joints without load-side sensors"
+requires-python = ">=3.12"
+authors = [
+    { name = "FlexSense-Guard Team" },
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "jsonschema>=4.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]
+python_files = ["test_*.py"]

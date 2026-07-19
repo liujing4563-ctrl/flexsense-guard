@@ -1,0 +1,104 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/validation_report.schema.json",
+    "title": "ValidationReport",
+    "description": "Validation report schema for FlexSense-Guard simulation runs",
+    "type": "object",
+    "properties": {
+        "schema_version": {
+            "type": "string",
+            "description": "Schema version (semver)",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "algorithm_version": {
+            "type": "string",
+            "description": "Algorithm version identifier"
+        },
+        "git_commit": {
+            "type": "string",
+            "description": "Git commit hash of this run"
+        },
+        "random_seed": {
+            "type": "integer",
+            "description": "Random seed used"
+        },
+        "decision": {
+            "type": "string",
+            "enum": ["pass", "fail", "inconclusive"],
+            "description": "Overall validation decision"
+        },
+        "load_position_rmse": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Load position RMSE [rad]"
+        },
+        "load_velocity_rmse": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Load velocity RMSE [rad/s]"
+        },
+        "external_torque_rmse": {
+            "type": "number",
+            "minimum": 0,
+            "description": "External torque estimation RMSE [Nm]"
+        },
+        "false_alarm_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of false alarms (normal classified as contact)"
+        },
+        "missed_detection_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of missed detections (contact not detected)"
+        },
+        "detection_delay_s": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Detection delay from contact onset [s]"
+        },
+        "stopping_time_s": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Time from detection to full stop [s]"
+        },
+        "post_contact_travel_rad": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Angular travel after contact detection [rad]"
+        },
+        "vibration_rms": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Vibration velocity RMS [rad/s]"
+        },
+        "energy_proxy": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Energy proxy (torque squared integral)"
+        },
+        "runtime_ms": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Per-step algorithm execution time [ms]"
+        },
+        "valid_flag": {
+            "type": "boolean",
+            "description": "Whether the report is valid"
+        }
+    },
+    "required": [
+        "schema_version",
+        "algorithm_version",
+        "git_commit",
+        "random_seed",
+        "decision",
+        "load_position_rmse",
+        "load_velocity_rmse",
+        "external_torque_rmse",
+        "false_alarm_count",
+        "missed_detection_count",
+        "valid_flag"
+    ],
+    "additionalProperties": false
+}

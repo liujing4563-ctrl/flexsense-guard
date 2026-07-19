@@ -1,0 +1,43 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# MATLAB binary formats
+*.mat binary
+*.slx binary
+*.slxc binary
+*.mdl binary
+*.sldd binary
+
+# Images and videos
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.mp4 binary
+*.avi binary
+
+# Archives
+*.zip binary
+*.tar.gz binary
+*.7z binary
+
+# Generated data
+*.csv text
+*.json text
+*.yaml text
+*.yml text
+
+# Documentation
+*.md text
+*.rst text
+*.txt text
+
+# Source code
+*.c text diff=c
+*.h text diff=c
+*.m text diff=matlab
+*.py text diff=python
+*.toml text
+*.cfg text
+*.cmake text

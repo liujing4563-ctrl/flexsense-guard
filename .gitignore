@@ -1,0 +1,70 @@
+# === Build & Output ===
+build/
+08_sil/build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# === MATLAB ===
+*.mat
+*.slx
+*.slxc
+*.mdl
+*.mdlp
+*.sldd
+*.mex*
+*.mexa64
+*.mexw64
+*.mexmaci64
+*.asv
+*.autosave
+slprj/
+simulink.cache/
+coderdat/
+info.xml
+*_ert_rtw/
+*_grt_rtw/
+rtwmakecfg.m
+
+# === Generated Data ===
+results/generated/*
+!results/generated/.gitkeep
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === CMake ===
+CMakeUserPresets.json
+
+# === Logs ===
+*.log
