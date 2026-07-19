@@ -1,0 +1,6 @@
+{
+    "schema_version": "0.1.0",
+    "payload_level": "heavy",
+    "J_l": 0.15,
+    "description": "Heavy load configuration (J_l = 0.15 kg*m^2)"
+}

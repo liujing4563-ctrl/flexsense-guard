@@ -1,0 +1,69 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/system_state.schema.json",
+    "title": "SystemState",
+    "description": "System state estimation output from the observer and confidence modules",
+    "type": "object",
+    "properties": {
+        "timestamp_s": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Current simulation time [s]"
+        },
+        "estimated_load_position_rad": {
+            "type": "number",
+            "description": "Estimated load-side position [rad]"
+        },
+        "estimated_load_velocity_rad_s": {
+            "type": "number",
+            "description": "Estimated load-side velocity [rad/s]"
+        },
+        "estimated_torsion_rad": {
+            "type": "number",
+            "description": "Estimated torsional deflection (theta_m/N - theta_l) [rad]"
+        },
+        "estimated_external_torque_nm": {
+            "type": "number",
+            "description": "Estimated external disturbance torque [Nm]"
+        },
+        "innovation_norm": {
+            "type": "number",
+            "minimum": 0,
+            "description": "L2 norm of the EKF innovation vector"
+        },
+        "confidence_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence score [0, 1]; higher = more trustworthy. NOT a probability."
+        },
+        "contact_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Contact likelihood score [0, 1]; NOT a probability."
+        },
+        "operation_mode": {
+            "type": "string",
+            "enum": ["normal", "vibration_suppression", "safe_slowdown", "degraded"],
+            "description": "Current operation mode"
+        },
+        "valid_flag": {
+            "type": "boolean",
+            "description": "Whether the state data is valid"
+        }
+    },
+    "required": [
+        "timestamp_s",
+        "estimated_load_position_rad",
+        "estimated_load_velocity_rad_s",
+        "estimated_torsion_rad",
+        "estimated_external_torque_nm",
+        "innovation_norm",
+        "confidence_score",
+        "contact_score",
+        "operation_mode",
+        "valid_flag"
+    ],
+    "additionalProperties": false
+}
