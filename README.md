@@ -4,10 +4,11 @@ Flexible-joint virtual sensing and safety-control simulation, using motor-side s
 
 ## Current stage
 
-The repository is at the **PR-0 repository-baseline** stage. This stage defines the
-project boundary, data contract, collaboration rules, and a small executable Python
-contract. It does not claim that the plant, observer, classifier, controller, SIL,
-or application has been validated.
+PR-0 repository baseline has been merged. The first P1 feasibility probe has now
+returned `fail`; the recorded evidence is in [`docs/probe_results.md`](docs/probe_results.md).
+The project is therefore downscoped to motor-side control simulation. It does not
+claim that virtual sensing, classification, controller logic, SIL, or an application
+has been validated.
 
 Some numbered directories were imported before this baseline was established. Treat
 them as exploratory material only; later PRs must validate each module separately.
@@ -49,11 +50,10 @@ MATLAB/Octave and C/SIL checks are intentionally not run or claimed by PR-0.
 
 ## Delivery sequence
 
-1. PR-0: repository baseline and executable data contract.
-2. PR-1: dual-inertia plant.
-3. PR-2: baseline observer.
-4. PR-3: confidence and trigger probe.
-5. PR-4+: classification, control, SIL, application, and material freeze only after
-   the 72-hour probe has a documented decision.
+1. PR-0: repository baseline and executable data contract — complete.
+2. P1 feasibility probe: load-side estimation — failed; see the recorded result.
+3. Further virtual-sensing development is blocked pending a separately reviewed
+   restart decision. Classification, control, SIL, application, and test-agent work
+   are not authorized by the failed probe.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) before creating a branch or pull request.
