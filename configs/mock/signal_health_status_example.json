@@ -1,0 +1,18 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/signal_health_status.schema.json",
+    "purpose": "仅用于信号健康契约联调，不代表健康检测算法结果",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.5,
+        "encoder_valid": true,
+        "current_valid": true,
+        "timestamp_valid": true,
+        "torque_valid": true,
+        "data_stale": false,
+        "saturation_active": true,
+        "reason_codes": ["ACTUATOR_SATURATED"]
+    }
+}

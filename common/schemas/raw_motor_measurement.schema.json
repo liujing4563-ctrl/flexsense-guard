@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/raw_motor_measurement.schema.json",
+  "title": "原始电机侧测量",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "motor_position_rad": {"type": "number"},
+    "motor_velocity_rad_s": {"type": "number"},
+    "motor_current_a": {"type": "number"},
+    "encoder_valid": {"type": "boolean"},
+    "current_valid": {"type": "boolean"},
+    "timestamp_valid": {"type": "boolean"}
+  },
+  "required": ["schema_version", "timestamp_s", "motor_position_rad", "motor_velocity_rad_s", "motor_current_a", "encoder_valid", "current_valid", "timestamp_valid"],
+  "additionalProperties": false
+}

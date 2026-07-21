@@ -1,17 +1,39 @@
-"""FlexSense-Guard 仿真项目的公共契约。"""
+"""FlexSense-Guard 仿真项目的 v2 公共契约。"""
 
 from .types import (
+    SCHEMA_VERSION,
+    ActuatorCommand,
+    ArtifactIndexEntry,
+    CalibrationCandidate,
+    CalibrationDecision,
+    CalibrationDecisionType,
+    ClassificationOutput,
     ClassificationState,
-    MotorSideMeasurement,
+    ConfidenceOutput,
+    ConfidenceState,
+    ControlCommand,
+    ImmutablePlantTrueConfig,
+    IntegrationValidationResult,
+    ModeDecision,
+    NominalParameterVersion,
+    ObserverEstimate,
+    ObserverInput,
     OperationMode,
+    P1ValidationResult,
+    P2ValidationResult,
+    P3ValidationResult,
+    PlantInputTrace,
+    RawMotorMeasurement,
     ReasonCode,
-    VirtualSensingEstimate,
+    SafetyActionLevel,
+    SignalHealthStatus,
+    SilValidationResult,
+    SystemStateSnapshot,
+    TorqueFeedback,
+    TorqueSource,
+    ValidationReport,
+    ValidationStage,
+    VerificationDecision,
 )
 
-__all__ = [
-    "ClassificationState",
-    "MotorSideMeasurement",
-    "OperationMode",
-    "ReasonCode",
-    "VirtualSensingEstimate",
-]
+__all__ = [name for name in globals() if not name.startswith("_")]

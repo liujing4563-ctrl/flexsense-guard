@@ -1,19 +1,46 @@
 {
     "fixture_type": "MOCK",
-    "schema_path": "common/schemas/system_state.schema.json",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/system_state_snapshot.schema.json",
     "purpose": "仅用于 App 正常状态接口联调，不是实验结果",
     "payload": {
+        "schema_version": "2.0.0",
         "timestamp_s": 0.5,
-        "estimated_load_position_rad": 0.01,
-        "estimated_load_velocity_rad_s": 0.02,
-        "estimated_torsion_rad": 0.001,
-        "estimated_external_torque_nm": 0.0,
-        "innovation_norm": 0.1,
-        "confidence_score": 0.95,
-        "contact_score": 0.05,
-        "classification_state": "NORMAL",
-        "operation_mode": "NORMAL_TRACKING",
-        "valid_flag": true,
-        "reason_codes": ["NONE"]
+        "observer_estimate": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.5,
+            "estimated_load_position_rad": 0.01,
+            "estimated_load_velocity_rad_s": 0.02,
+            "estimated_torsion_rad": 0.001,
+            "estimated_external_torque_nm": 0.03,
+            "normalized_innovation_squared": 0.1,
+            "estimate_finite": true,
+            "observer_diverged": false
+        },
+        "confidence_output": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.5,
+            "confidence_score": 0.95,
+            "valid_flag": true,
+            "confidence_state": "VALID",
+            "reason_codes": ["NONE"]
+        },
+        "classification_output": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.5,
+            "classification_state": "NORMAL",
+            "contact_score": 0.05,
+            "valid_flag": true
+        },
+        "mode_decision": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.5,
+            "operation_mode": "NORMAL_TRACKING",
+            "contact_hazard_latched": false,
+            "safety_action_required": false,
+            "safety_action_level": "NONE",
+            "reason_codes": ["NONE"]
+        }
     }
 }

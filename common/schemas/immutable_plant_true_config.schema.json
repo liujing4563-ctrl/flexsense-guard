@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/immutable_plant_true_config.schema.json",
+  "title": "不可变 Plant 真值配置",
+  "description": "单次实验开始后不可修改，只供 Scenario、Plant 和离线验证使用",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "configuration_id": {"type": "string", "minLength": 1},
+    "motor_inertia_kg_m2": {"type": "number", "exclusiveMinimum": 0},
+    "load_inertia_kg_m2": {"type": "number", "exclusiveMinimum": 0},
+    "shaft_stiffness_nm_rad": {"type": "number", "exclusiveMinimum": 0},
+    "shaft_damping_nms_rad": {"type": "number", "minimum": 0},
+    "gear_ratio": {"type": "number", "exclusiveMinimum": 0},
+    "actuator_limit_nm": {"type": "number", "exclusiveMinimum": 0}
+  },
+  "required": ["schema_version", "configuration_id", "motor_inertia_kg_m2", "load_inertia_kg_m2", "shaft_stiffness_nm_rad", "shaft_damping_nms_rad", "gear_ratio", "actuator_limit_nm"],
+  "additionalProperties": false
+}

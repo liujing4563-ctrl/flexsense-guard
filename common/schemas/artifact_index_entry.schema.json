@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/artifact_index_entry.schema.json",
+  "title": "证据索引条目",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "artifact_type": {"type": "string", "minLength": 1},
+    "uri": {"type": "string", "minLength": 1},
+    "checksum_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "size_bytes": {"type": "integer", "minimum": 0},
+    "owner": {"type": "string", "minLength": 1},
+    "available": {"type": "boolean"}
+  },
+  "required": ["schema_version", "artifact_id", "artifact_type", "uri", "checksum_sha256", "size_bytes", "owner", "available"],
+  "additionalProperties": false
+}

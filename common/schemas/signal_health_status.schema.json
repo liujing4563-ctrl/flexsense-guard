@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/signal_health_status.schema.json",
+  "title": "信号健康状态",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "encoder_valid": {"type": "boolean"},
+    "current_valid": {"type": "boolean"},
+    "timestamp_valid": {"type": "boolean"},
+    "torque_valid": {"type": "boolean"},
+    "data_stale": {"type": "boolean"},
+    "saturation_active": {"type": "boolean"},
+    "reason_codes": {"$ref": "contract_common.schema.json#/$defs/reason_codes"}
+  },
+  "required": ["schema_version", "timestamp_s", "encoder_valid", "current_valid", "timestamp_valid", "torque_valid", "data_stale", "saturation_active", "reason_codes"],
+  "additionalProperties": false
+}

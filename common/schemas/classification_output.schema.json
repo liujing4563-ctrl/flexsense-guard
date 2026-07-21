@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/classification_output.schema.json",
+  "title": "分类输出",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "classification_state": {"$ref": "contract_common.schema.json#/$defs/classification_state"},
+    "contact_score": {"type": "number", "minimum": 0, "maximum": 1},
+    "valid_flag": {"type": "boolean"}
+  },
+  "required": ["schema_version", "timestamp_s", "classification_state", "contact_score", "valid_flag"],
+  "additionalProperties": false
+}

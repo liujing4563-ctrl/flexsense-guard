@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/torque_feedback.schema.json",
+  "title": "电机转矩反馈",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "motor_torque_feedback_nm": {"type": "number"},
+    "torque_source": {"$ref": "contract_common.schema.json#/$defs/torque_source"},
+    "torque_valid": {"type": "boolean"},
+    "torque_std_nm": {"type": "number", "minimum": 0}
+  },
+  "required": ["schema_version", "timestamp_s", "motor_torque_feedback_nm", "torque_source", "torque_valid", "torque_std_nm"],
+  "additionalProperties": false
+}

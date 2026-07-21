@@ -1,64 +1,57 @@
-from dataclasses import fields
-
 import pytest
 
 from flexsense_guard import (
-    ClassificationState,
-    MotorSideMeasurement,
+    SCHEMA_VERSION,
+    ActuatorCommand,
+    ConfidenceOutput,
+    ConfidenceState,
+    ModeDecision,
+    ObserverInput,
     OperationMode,
     ReasonCode,
-    VirtualSensingEstimate,
+    SafetyActionLevel,
 )
 
 
-def test_public_contract_can_be_imported_and_constructed() -> None:
-    measurement = MotorSideMeasurement(
-        timestamp_s=0.0,
-        motor_position_rad=0.0,
-        motor_velocity_rad_s=0.0,
-        motor_current_a=0.0,
-        torque_command_nm=0.0,
-        motor_torque_applied_nm=0.0,
-        motor_torque_measured_nm=0.0,
-        encoder_valid=True,
-        current_valid=True,
-        timestamp_valid=True,
-        saturation_flag=False,
-    )
-    estimate = VirtualSensingEstimate(
-        timestamp_s=0.0,
-        estimated_load_position_rad=0.0,
-        estimated_load_velocity_rad_s=0.0,
-        estimated_torsion_rad=0.0,
-        estimated_external_torque_nm=0.0,
-        innovation_norm=0.0,
-        confidence_score=1.0,
-        contact_score=0.0,
-        classification_state=ClassificationState.NORMAL,
-        operation_mode=OperationMode.NORMAL_TRACKING,
-        valid_flag=True,
-        reason_codes=(ReasonCode.NONE,),
+def test_v2_contracts_can_be_imported_and_constructed() -> None:
+    command = ActuatorCommand(SCHEMA_VERSION, 0.5, 1.2)
+    observer_input = ObserverInput(
+        SCHEMA_VERSION,
+        0.5,
+        0.12,
+        0.3,
+        1.01,
+        True,
+        True,
+        True,
+        True,
+        0.04,
     )
 
-    assert measurement.encoder_valid
-    assert estimate.classification_state is ClassificationState.NORMAL
-    assert estimate.operation_mode is OperationMode.NORMAL_TRACKING
-    assert "contact_probability" not in {field.name for field in fields(estimate)}
+    assert command.torque_command_nm == 1.2
+    assert observer_input.motor_torque_feedback_nm == 1.01
 
 
-def test_scores_are_bounded() -> None:
-    with pytest.raises(ValueError, match="confidence_score"):
-        VirtualSensingEstimate(
-            timestamp_s=0.0,
-            estimated_load_position_rad=0.0,
-            estimated_load_velocity_rad_s=0.0,
-            estimated_torsion_rad=0.0,
-            estimated_external_torque_nm=0.0,
-            innovation_norm=0.0,
-            confidence_score=1.1,
-            contact_score=0.0,
-            classification_state=ClassificationState.NORMAL,
-            operation_mode=OperationMode.NORMAL_TRACKING,
-            valid_flag=True,
-            reason_codes=(),
+def test_hard_invalid_contract_rejects_valid_flag() -> None:
+    with pytest.raises(ValueError, match="HARD_INVALID"):
+        ConfidenceOutput(
+            SCHEMA_VERSION,
+            1.0,
+            0.1,
+            True,
+            ConfidenceState.HARD_INVALID,
+            (ReasonCode.ENCODER_INVALID,),
+        )
+
+
+def test_latched_hazard_rejects_weak_action() -> None:
+    with pytest.raises(ValueError, match="SLOWDOWN"):
+        ModeDecision(
+            SCHEMA_VERSION,
+            1.0,
+            OperationMode.LOW_CONFIDENCE_DEGRADED,
+            True,
+            True,
+            SafetyActionLevel.LIMITED,
+            (ReasonCode.CONTACT_HAZARD_LATCHED,),
         )

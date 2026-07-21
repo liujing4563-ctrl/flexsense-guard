@@ -4,8 +4,8 @@
 
 - 项目只研究一个主导柔性关节。
 - 每个分支和 PR 只完成一个阶段目标。
-- P1 未形成有效、充分且可复现的 `PASS` 证据前，不启动 P2、P3、App、C/SIL
-  或测试 Agent 主体开发。
+- P1-V 未形成有效、充分且可复现的 `PASS` 证据前，不启动 P2、P3、App、C/SIL
+  或测试 Agent 主体开发；P1-A 失败不得被解释为状态不可估计。
 - P2 未通过前，不形成外部接触可靠识别主张。
 - P3 未通过前，可信评分不得驱动安全模式。
 - 公开仓库不得存放专利、比赛敏感材料或个人数据。
@@ -21,9 +21,12 @@
   Mode Manager 或 Control。
 - Plant 真实参数与 Observer 名义参数必须分离。
 - 统一使用 `tau_s_load_nm` 表示负载侧弹性力矩；电机侧反射关系必须在模型文档中
-  冻结并通过能量一致性检查。
-- 必须区分 `torque_command_nm`、`motor_torque_applied_nm` 和
-  `motor_torque_measured_nm`；Observer 禁止直接使用原始力矩指令。
+  明确、由 Simulink 同学共同确认并通过能量一致性检查。
+- 命令、Plant 实际输入和 Observer 转矩反馈必须分别使用 `ActuatorCommand`、
+  `PlantInputTrace` 和 `TorqueFeedback`；Observer 只能读取 `ObserverInput`，禁止读取
+  原始指令、`motor_torque_applied_nm`、Plant 真值或真实参数。
+- `ImmutablePlantTrueConfig` 与 `VersionedNominalParameterStore` 必须隔离；在线校准
+  不得修改 Plant 真值或使用负载侧真值作更新决定。
 - 历史执行结果和当前技术结论必须分层记录；无效或不足证据对应
   `NOT_VERIFIED`，不得解释为技术路线失败。
 - 公共接口变更必须同步文档、Schema、Python 类型及受影响语言定义。

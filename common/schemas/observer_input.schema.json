@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/observer_input.schema.json",
+  "title": "Observer 合法输入",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "motor_position_rad": {"type": "number"},
+    "motor_velocity_rad_s": {"type": "number"},
+    "motor_torque_feedback_nm": {"type": "number"},
+    "encoder_valid": {"type": "boolean"},
+    "current_valid": {"type": "boolean"},
+    "timestamp_valid": {"type": "boolean"},
+    "torque_valid": {"type": "boolean"},
+    "torque_std_nm": {"type": "number", "minimum": 0}
+  },
+  "required": ["schema_version", "timestamp_s", "motor_position_rad", "motor_velocity_rad_s", "motor_torque_feedback_nm", "encoder_valid", "current_valid", "timestamp_valid", "torque_valid", "torque_std_nm"],
+  "additionalProperties": false
+}

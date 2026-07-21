@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/p1_validation_result.schema.json",
+  "title": "P1 状态估计结果",
+  "type": "object",
+  "properties": {
+    "payload_level": {"type": "string", "enum": ["light", "medium", "heavy"]},
+    "p1_viability_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "p1_advantage_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "load_position_rmse_rad": {"type": "number", "minimum": 0},
+    "load_velocity_rmse_rad_s": {"type": "number", "minimum": 0},
+    "load_position_max_abs_error_rad": {"type": "number", "minimum": 0},
+    "load_velocity_max_abs_error_rad_s": {"type": "number", "minimum": 0},
+    "baseline_load_position_rmse_rad": {"type": "number", "minimum": 0},
+    "baseline_load_velocity_rmse_rad_s": {"type": "number", "minimum": 0},
+    "position_improvement_median_pct": {"type": "number"},
+    "velocity_improvement_median_pct": {"type": "number"},
+    "position_improvement_iqr_pct": {"type": "number", "minimum": 0},
+    "velocity_improvement_iqr_pct": {"type": "number", "minimum": 0},
+    "position_winning_seed_count": {"type": "integer", "minimum": 0},
+    "velocity_winning_seed_count": {"type": "integer", "minimum": 0},
+    "evaluated_seed_count": {"type": "integer", "minimum": 1},
+    "estimate_finite": {"type": "boolean"},
+    "observer_diverged": {"type": "boolean"},
+    "external_torque_rmse_nm": {"type": "number", "minimum": 0, "description": "可选诊断指标，不是P1强制门禁"}
+  },
+  "required": ["payload_level", "p1_viability_decision", "p1_advantage_decision", "load_position_rmse_rad", "load_velocity_rmse_rad_s", "load_position_max_abs_error_rad", "load_velocity_max_abs_error_rad_s", "baseline_load_position_rmse_rad", "baseline_load_velocity_rmse_rad_s", "position_improvement_median_pct", "velocity_improvement_median_pct", "position_improvement_iqr_pct", "velocity_improvement_iqr_pct", "position_winning_seed_count", "velocity_winning_seed_count", "evaluated_seed_count", "estimate_finite", "observer_diverged"],
+  "additionalProperties": false
+}

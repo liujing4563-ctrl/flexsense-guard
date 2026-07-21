@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/validation_report_envelope.schema.json",
+  "title": "验证报告公共证据 Envelope",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "report_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "stage": {"type": "string", "enum": ["P1", "P2", "P3", "SIL", "INTEGRATION"]},
+    "git_commit": {"type": "string", "minLength": 1},
+    "algorithm_version": {"type": "string", "minLength": 1},
+    "configuration_id": {"type": "string", "minLength": 1},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "random_seed": {"type": "integer", "minimum": 0},
+    "software_environment": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"minLength": 1},
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "valid_flag": {"type": "boolean"},
+    "failure_reason_codes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "artifact_index": {"type": "array", "items": {"$ref": "artifact_index_entry.schema.json"}},
+    "runtime_ms": {"type": "number", "minimum": 0}
+  },
+  "required": ["schema_version", "report_id", "experiment_id", "stage", "git_commit", "configuration_id", "scenario_id", "decision", "valid_flag", "failure_reason_codes", "artifact_index"]
+}

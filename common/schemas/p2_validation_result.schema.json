@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/p2_validation_result.schema.json",
+  "title": "P2 可分辨性结果",
+  "type": "object",
+  "properties": {
+    "p2_vibration_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "p2_contact_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "false_alarm_count": {"type": "integer", "minimum": 0},
+    "missed_detection_count": {"type": "integer", "minimum": 0},
+    "detection_delay_s": {"type": "number", "minimum": 0},
+    "vibration_velocity_rms_rad_s": {"type": "number", "minimum": 0},
+    "external_torque_rmse_nm": {"type": "number", "minimum": 0}
+  },
+  "required": ["p2_vibration_decision", "p2_contact_decision", "false_alarm_count", "missed_detection_count"],
+  "additionalProperties": false
+}

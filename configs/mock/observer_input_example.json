@@ -1,0 +1,19 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/observer_input.schema.json",
+    "purpose": "仅用于 ObserverInput 边界联调，不代表 Observer 已修复",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.5,
+        "motor_position_rad": 0.12,
+        "motor_velocity_rad_s": 0.3,
+        "motor_torque_feedback_nm": 1.01,
+        "encoder_valid": true,
+        "current_valid": true,
+        "timestamp_valid": true,
+        "torque_valid": true,
+        "torque_std_nm": 0.04
+    }
+}

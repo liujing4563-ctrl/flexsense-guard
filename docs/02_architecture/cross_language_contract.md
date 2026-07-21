@@ -1,48 +1,89 @@
 # 跨语言契约矩阵
 
-## 目的
+当前状态只以
+[`current_status_and_next_steps.md`](../current_status_and_next_steps.md) 为准。本矩阵记录
+v2 候选契约在各语言中的实际落地，不把规范审查解释为实现完成。
 
-本矩阵用于跟踪公共字段在文档、JSON、Python、MATLAB、C/C++ 和 App 中的落地
-状态。语义冻结不等于所有语言已经迁移，只有各实现完成一致性测试后，端到端
-契约才可标记为已验证。
+## 状态规则
 
-状态取值：`FROZEN`、`IMPLEMENTED`、`PENDING`、`BLOCKED`、`NOT_APPLICABLE`。
+本表的 Specification 使用 `DRAFT/REVIEWED/APPROVED/FROZEN`；实现使用
+`MISSING/PLACEHOLDER/PARTIAL/IMPLEMENTED/INVALID`。验证结果另行记录，不在本表
+混用。
 
-## 当前矩阵
+## DTO 矩阵
 
-| 契约项 | 文档语义 | JSON Schema | Python | MATLAB/Simulink | C/C++ SIL | App | 当前结论 |
-|---|---|---|---|---|---|---|---|
-| 三类电机力矩字段 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 端到端 `NOT_VERIFIED` |
-| `VirtualSensingEstimate` 输出 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | Python/JSON 一致 |
-| 分类状态枚举 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 主体功能受 P2 阻断 |
-| 运行模式枚举 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 状态机规范已定义 |
-| 原因码 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 新增值须走接口 PR |
-| 验证结论 | `FROZEN` | `IMPLEMENTED` | `NOT_APPLICABLE` | `PENDING` | `BLOCKED` | `BLOCKED` | 统一为 `PASS/FAIL/NOT_VERIFIED` |
-| 场景配置 | `FROZEN` | `IMPLEMENTED` | `PENDING` | `PENDING` | `NOT_APPLICABLE` | `BLOCKED` | 尚无端到端运行证据 |
+| DTO | Specification | Python | Schema | MATLAB | C | App |
+|---|---|---|---|---|---|---|
+| `ActuatorCommand` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `PlantInputTrace` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `RawMotorMeasurement` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `TorqueFeedback` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `SignalHealthStatus` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ObserverInput` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ObserverEstimate` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ConfidenceOutput` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ClassificationOutput` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ModeDecision` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `SystemStateSnapshot` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `ControlCommand` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `ImmutablePlantTrueConfig` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `NominalParameterVersion` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `CalibrationCandidate` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `CalibrationDecision` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `ArtifactIndexEntry` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| Stage Validation Report | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+
+MATLAB 标记为 `INVALID` 表示仓库已有旧实现，但字段、方程或输入边界不符合 v2；
+`MISSING` 表示尚不存在相应映射。Python/Schema 的 `IMPLEMENTED` 只表示契约结构和
+测试存在，不代表主体算法实现。
+
+## 关键字段边界
+
+| 字段 | 所属 DTO | Observer 可见 | 说明 |
+|---|---|---|---|
+| `torque_command_nm` | `ActuatorCommand` | 否 | 控制意图 |
+| `motor_torque_applied_nm` | `PlantInputTrace` | 否 | 仿真 Plant 实际输入追踪值 |
+| `motor_torque_feedback_nm` | `TorqueFeedback`、`ObserverInput` | 是 | 带来源、有效性和标准差的反馈 |
+| `normalized_innovation_squared` | `ObserverEstimate` | 输出 | 不混合原始 rad/rad/s L2 范数 |
+| `contact_hazard_latched` | `ModeDecision` | N/A | Safety Supervisor 独占写入和清除的危险记忆 |
+| `safety_action_level` | `ModeDecision`、`ControlCommand` | N/A | 最小安全动作包络 |
+
+## 破坏性迁移
+
+v1 的 `MotorSideMeasurement`、`motor_torque_measured_nm` 和扁平 `SystemState` 被 v2
+专用 DTO 替代。旧数据只能由明确的离线迁移器转换，不在当前类型中保留兼容别名。
+
+| v1 结构或字段 | v2 结构或字段 | 迁移处理 |
+|---|---|---|
+| `MotorSideMeasurement` | `RawMotorMeasurement`、`TorqueFeedback`、`SignalHealthStatus`、`ObserverInput` | 按生产者和消费者拆分，不复制整个旧对象 |
+| `torque_command_nm` | `ActuatorCommand.torque_command_nm` | 只进入 Actuator，不进入 Observer |
+| `motor_torque_applied_nm` | `PlantInputTrace.motor_torque_applied_nm` | 只供 Plant 和离线 Validation，禁止进入 Observer |
+| `motor_torque_measured_nm` | `TorqueFeedback.motor_torque_feedback_nm` | 重命名并新增来源、有效性和标准差；不保证来自转矩传感器 |
+| 旧扁平 `SystemState` | `SystemStateSnapshot` | 改为多模块输出的只读时间对齐快照 |
+| `innovation_norm` | `ObserverEstimate.normalized_innovation_squared` | 原始混合单位 L2 值不可直接迁移，必须重新计算 |
+
+迁移检查：所有当前 v2 DTO 使用 `schema_version="2.0.0"`；Mock 只引用 v2 Schema；
+契约测试必须拒绝旧字段；当前状态入口只保留
+[`current_status_and_next_steps.md`](../current_status_and_next_steps.md)。离线迁移器尚未
+实现，需要迁移历史数据时由数据所有者单独提交，不在运行时保留双版本权威字段。
 
 ## 权威来源
 
 | 内容 | 权威来源 |
 |---|---|
-| 字段语义、单位、范围 | [`interface_spec.md`](interface_spec.md) |
-| 符号和力矩所在侧 | [`glossary_and_symbols.md`](glossary_and_symbols.md) |
+| 当前阶段状态 | [`current_status_and_next_steps.md`](../current_status_and_next_steps.md) |
+| 字段、单位和失效规则 | [`interface_spec.md`](interface_spec.md) |
+| 数学符号 | [`glossary_and_symbols.md`](glossary_and_symbols.md) |
 | JSON 结构 | `common/schemas/*.schema.json` |
-| Python 参考类型 | `python/flexsense_guard/types.py` |
-| MATLAB 信号定义 | 由 Simulink 同学在 `01_plant/**`、`02_observer/**` 和 runner 中迁移 |
-| C/C++ 类型 | 由嵌入式 Linux 同学在 `08_sil/include/**` 中实现 |
-| App 映射 | 由计算机软件同学在 `07_app/**` 中实现 |
+| Python 类型 | `python/flexsense_guard/types.py` |
+| MATLAB 映射 | Simulink 同学负责的 Plant、Observer 和 runner |
+| C/C++ 类型 | 嵌入式 Linux 同学在 `08_sil/include/**` 实现 |
+| App 映射 | 软件同学在 `07_app/**` 实现 |
 
-## 兼容与迁移规则
+## 迁移规则
 
-1. 项目负责人先冻结语义、单位、枚举和失效行为。
-2. 公共 Schema 与 Python 参考类型在同一契约 PR 中迁移并通过自动测试。
-3. 模块负责同学在各自主责路径迁移语言类型，不得保留含糊的兼容别名。
-4. 旧数据如需读取，必须在模块边界做显式版本转换，不得污染新公共结构。
-5. 任何字段变更都要更新本矩阵、Mock 样例和受影响测试。
-6. 端到端状态只有在真实生产者和消费者共同回放通过后才能标记为 `FROZEN`。
-
-## 当前交接
-
-项目负责人已完成文档、JSON Schema 和 Python 公共契约层。Simulink 同学下一步
-负责 MATLAB 三类力矩字段、Plant 输出和 Observer 输入迁移；该工作完成并复验前，
-不得声称公共输入链路已完全冻结。
+1. 模块负责同学只能在自己的主责路径实现语言映射；
+2. 不保留含糊旧字段或自动回退别名；
+3. 公共字段变更同步文档、Schema、Python、Mock 和测试；
+4. MATLAB、C 和 App 未共同回放前，跨语言实现保持 `PARTIAL`；
+5. 端到端状态只能由真实生产者、消费者和证据决定。

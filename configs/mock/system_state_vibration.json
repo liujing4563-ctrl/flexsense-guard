@@ -1,0 +1,46 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/system_state_snapshot.schema.json",
+    "purpose": "仅用于 App 柔性振动状态接口联调，不是实验结果，也不表示 P2 已通过",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.9,
+        "observer_estimate": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.9,
+            "estimated_load_position_rad": 0.04,
+            "estimated_load_velocity_rad_s": 0.35,
+            "estimated_torsion_rad": 0.012,
+            "estimated_external_torque_nm": 0.2,
+            "normalized_innovation_squared": 0.7,
+            "estimate_finite": true,
+            "observer_diverged": false
+        },
+        "confidence_output": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.9,
+            "confidence_score": 0.84,
+            "valid_flag": true,
+            "confidence_state": "SOFT_DEGRADED",
+            "reason_codes": ["EXTERNAL_DYNAMIC_SUSPECTED"]
+        },
+        "classification_output": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.9,
+            "classification_state": "FLEXIBLE_VIBRATION",
+            "contact_score": 0.18,
+            "valid_flag": true
+        },
+        "mode_decision": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 0.9,
+            "operation_mode": "VIBRATION_SUPPRESSION",
+            "contact_hazard_latched": false,
+            "safety_action_required": true,
+            "safety_action_level": "LIMITED",
+            "reason_codes": ["EXTERNAL_DYNAMIC_SUSPECTED"]
+        }
+    }
+}

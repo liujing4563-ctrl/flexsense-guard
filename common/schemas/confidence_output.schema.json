@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/confidence_output.schema.json",
+  "title": "可信评分输出",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "confidence_score": {"type": "number", "minimum": 0, "maximum": 1},
+    "valid_flag": {"type": "boolean"},
+    "confidence_state": {"type": "string", "enum": ["VALID", "SOFT_DEGRADED", "HARD_INVALID"]},
+    "reason_codes": {"$ref": "contract_common.schema.json#/$defs/reason_codes"}
+  },
+  "required": ["schema_version", "timestamp_s", "confidence_score", "valid_flag", "confidence_state", "reason_codes"],
+  "allOf": [
+    {
+      "if": {"properties": {"confidence_state": {"const": "HARD_INVALID"}}},
+      "then": {"properties": {"valid_flag": {"const": false}}},
+      "else": {"properties": {"valid_flag": {"const": true}}}
+    }
+  ],
+  "additionalProperties": false
+}
