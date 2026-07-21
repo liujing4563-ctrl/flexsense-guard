@@ -32,7 +32,7 @@
 |---|---|---|
 | 项目负责人同学 | `docs/01_project/**` | 章程、范围、风险和路线 |
 | 项目负责人同学 | `docs/02_architecture/**` | 系统架构、数学模型和公共接口语义 |
-| 项目负责人同学 | `docs/03_validation/**` | P1/P2/P3 门禁、实验协议和正式结果状态 |
+| 项目负责人同学 | `docs/03_validation/**` | P1/P2/P3 子门、实验协议和历史证据解释；当前状态只在权威状态文件维护 |
 | 项目负责人同学 | `docs/04_collaboration/**`、`docs/README.md`、`docs/current_status_and_next_steps.md` | 职责、任务、Git 流程、文档索引和当前状态 |
 | 项目负责人同学 | `docs/decision_log.md` | 跨类别重大决策、证据和反转条件 |
 | 项目负责人同学 | `README.md`、`CONTRIBUTING.md`、`AGENTS.md`、`LICENSE_NOTICE.md`、`.gitignore`、`.editorconfig`、`.gitattributes` | 仓库入口、协作规则、版本控制、编辑格式和许可边界 |
@@ -46,11 +46,11 @@
 | 项目负责人同学 | `scripts/setup_project.m` | 跨模块 MATLAB 路径和集成入口，不包含 P1 算法逻辑 |
 | Simulink 同学 | `01_plant/**` | Plant、参数、MATLAB/Simulink、模块测试和说明 |
 | Simulink 同学 | `02_observer/**` | Observer、baseline、参数、模块测试和说明 |
-| Simulink 同学 | `scripts/run_p1_feasibility_probe.m`、`scripts/run_probe.m` | P1 runner 和 MATLAB 探针执行；阶段结论仍由项目负责人审查 |
-| Simulink 同学 | `results/p1/**` | P1 原始证据索引和机器可读汇总；阶段决定由项目负责人审查 |
+| Simulink 同学 | `scripts/run_p1_feasibility_probe.m`、`scripts/run_probe.m` | P1-V/P1-A runner 和 MATLAB 探针执行；阶段结论仍由项目负责人审查 |
+| Simulink 同学 | `results/p1/**` | P1-V/P1-A 原始证据索引和机器可读汇总；阶段决定由项目负责人审查 |
 | 深度学习通感算同学 | `04_classification/**` | 特征、规则分类、后续轻量模型、模块测试和数据说明 |
 | 深度学习通感算同学 | `09_test_agent/**` | 测试 Agent 工具、工作流和报告草稿；不得绕过阶段门 |
-| 深度学习通感算同学 | `06_validation/fault_injection/**`、`06_validation/monte_carlo/**`、`results/p2/**` | 故障注入、批量实验工具和 P2 证据；主体实现受 P1 门禁约束 |
+| 深度学习通感算同学 | `06_validation/fault_injection/**`、`06_validation/monte_carlo/**`、`results/p2/**` | 故障注入、批量实验工具和 P2 证据；主体实现受 P1-V 门禁约束 |
 | 计算机软件同学 | `configs/**`、`06_validation/reports/**`、`07_app/**`、`results/reports/**` | 版本化配置、报告工具、App 和报告产物；Mock 由项目负责人先建立后交接 |
 | 嵌入式 Linux 同学 | `08_sil/**` | C/C++、CMake、CTest、基准和 SIL；主体实现受前置门禁约束 |
 
@@ -65,12 +65,12 @@
 
 | 主责同学 | 已规划目录 | 启动条件与用途 |
 |---|---|---|
-| 深度学习通感算同学 | `04_classification/datasets/**` | P1 形成有效 `PASS` 证据后，保存数据说明、版本和划分索引；不提交大规模生成数据 |
-| 深度学习通感算同学 | `06_validation/fault_injection/**`、`06_validation/monte_carlo/**` | P1 通过且故障范围冻结后，维护故障注入和批量实验工具 |
-| 计算机软件同学 | `configs/**` | 公共配置格式冻结后，维护版本化运行配置；算法参数须由对应模块同学确认 |
+| 深度学习通感算同学 | `04_classification/datasets/**` | P1-V 形成有效 `PASS` 证据后，保存数据说明、版本和划分索引；不提交大规模生成数据 |
+| 深度学习通感算同学 | `06_validation/fault_injection/**`、`06_validation/monte_carlo/**` | P1-V 通过且故障范围获批后，维护故障注入和批量实验工具 |
+| 计算机软件同学 | `configs/**` | 公共配置候选契约获批后，维护版本化运行配置；算法参数须由对应模块同学确认 |
 | 计算机软件同学 | `06_validation/reports/**` | 有真实运行结果后，维护结果索引和自动报告，不修改指标语义 |
-| 计算机软件同学 | `07_app/**` | P1 形成有效 `PASS` 证据后，开发 App、看板、状态管理和演示 |
-| 嵌入式 Linux 同学 | `08_sil/**` | 主算法和公共接口冻结后，开发 C/C++、CMake、CTest 和 SIL |
+| 计算机软件同学 | `07_app/**` | P1-V 形成有效 `PASS` 证据后，开发 App、看板、状态管理和演示 |
+| 嵌入式 Linux 同学 | `08_sil/**` | 主算法有效且公共接口获批后，开发 C/C++、CMake、CTest 和 SIL |
 | 各阶段负责同学 | `results/p1/**`、`results/p2/**`、`results/p3/**` | 对应阶段获准运行后保存证据索引和汇总，具体归属见现有路径表 |
 | 项目负责人同学 | `results/integration/**` | 前置阶段通过后保存跨模块集成验收索引 |
 | 计算机软件同学 | `results/reports/**` | 有真实证据后保存可审查报告产物 |
@@ -117,7 +117,7 @@
 - 项目章程、范围、A/B/C 技术路线和最终交付；
 - 总体架构、公共接口和跨模块不变量；
 - 力矩所在侧、齿轮方向、动力学符号和 Plant/Observer 输入契约；
-- P1、P2、P3 门禁、实验公平性和降级决定；
+- P1-V/P1-A、P2-VIB/P2-CONTACT、P3 三个子门、实验公平性和降级决定；
 - 事件触发校准、可信门控及 `UPDATE`、`HOLD`、`ROLLBACK` 规则；
 - 模式管理、风险控制、系统集成、报告和答辩；
 - 为跨模块联调建立 Mock、Schema 和契约测试，不长期代替模块负责人完成主体实现；
@@ -131,7 +131,7 @@
 
 ### 输出接口
 
-- 冻结的章程、范围、架构、接口和门禁；
+- 已批准的范围，以及经审查的架构、接口和阶段门候选规范；
 - 集成决定、风险处置和路线调整；
 - 模块交付入口、审查意见和最终报告。
 
@@ -145,7 +145,7 @@
 
 - 五份核心文档内容一致；
 - 公共枚举和字段在文档、Schema 与 Python 中一致；
-- P1 真实状态未被篡改；
+- P1 历史记录和当前验证状态未被混写；
 - 没有把未运行检查写成通过；
 - 没有在基础工作包中修改主体算法。
 
@@ -182,7 +182,7 @@
 ### 协作但不主责目录
 
 - 与项目负责人同学共同确认 `docs/02_architecture/**` 和
-  `docs/03_validation/**`，不单方面修改冻结模型或门禁；
+  `docs/03_validation/**`，不单方面修改已审查的候选模型或门禁；
 - 公共字段变更协作修改 `common/schemas/**`，语义仍由项目负责人同学主责。
 
 ### 核心职责
@@ -191,31 +191,31 @@
 - 与项目负责人同学共同确认力矩侧、齿轮方向、动力学方程和能量一致性要求；
 - MATLAB EKF、雅可比、协方差和参数失配；
 - Simulink `.slx`、MIL、场景运行、曲线和 MATLAB 证据；
-- 当前 P1 MATLAB 修复、复验及结果说明。
+- 当前 P1-V/P1-A MATLAB 修复、复验及结果说明。
 
 ### 输入接口
 
-- 冻结的数学模型、三类力矩字段、场景配置和 `MotorSideMeasurement`；
-- P1 门禁、负载条件、随机种子和评价协议。
+- 经审查并待共同确认的数学模型，以及 v2 DTO、场景配置；
+- P1-V/P1-A 门禁、负载条件、随机种子和评价协议。
 
 ### 输出接口
 
-- `torque_command_nm`、`motor_torque_applied_nm`、
-  `motor_torque_measured_nm`、其他电机侧测量、仿真真值和场景元数据；
-- `VirtualSensingEstimate` 的 Observer 部分；
+- `ActuatorCommand`、`PlantInputTrace`、`RawMotorMeasurement`、`TorqueFeedback`、
+  `SignalHealthStatus` 和场景元数据；仿真真值仅输出给离线评价；
+- `ObserverEstimate`；
 - MATLAB/MIL 结果、配置、日志和技术说明。
 
 ### 第一阶段交付
 
 - 可复现的三负载双惯量 Plant；
 - 只使用电机侧测量的 MATLAB EKF；
-- P1 多负载、多随机种子运行记录。
+- P1-V/P1-A 多负载、多随机种子运行记录。
 
 ### 验收标准
 
 - 动力学、齿轮比、符号、单位和积分方法说明完整；
 - 通过无耗散能量一致性检查；
-- Plant 使用实际施加力矩，Observer 使用可追溯测量力矩，不直接使用原始指令；
+- Plant 使用 `PlantInputTrace`，Observer 只读取可追溯的 `ObserverInput`；
 - Plant 与 Observer 参数分离；
 - 无真值泄漏；
 - P/Q/R 维度和数值合法；
@@ -223,7 +223,7 @@
 
 ### 前置依赖
 
-- 项目负责人冻结模型、接口和 P1 门禁；
+- 项目负责人提供经审查的模型、接口和 P1 子门，Simulink 同学完成共同确认；
 - 软件同学提供版本化场景配置格式。
 
 ### 交接对象
@@ -236,7 +236,7 @@
 
 - 不修改公共接口而不同步契约；
 - 不向 Observer 输入 Plant 真值；
-- 不自行降低 P1 门限；
+- 不自行降低 P1-V/P1-A 门限；
 - 不把未运行的 Simulink 或 MATLAB 检查写成通过。
 
 ## 工作包三：深度学习通感算同学
@@ -249,7 +249,7 @@
 - 验证工具与 P2 证据：`06_validation/fault_injection/**`、
   `06_validation/monte_carlo/**`、`results/p2/**`。
 
-相关 README 骨架已经建立，但主体工作均受 P1 阶段门约束，不能写成已开始或完成。
+相关 README 骨架已经建立，但主体工作均受 P1-V 阶段门约束，不能写成已开始或完成。
 
 ### 协作但不主责目录
 
@@ -265,7 +265,7 @@
 
 ### 输入接口
 
-- P1 通过后的状态估计、创新残差和外扰估计；
+- P1-V 通过后的状态估计、归一化创新信息和外扰诊断估计；
 - 场景配置、仿真标签和数据划分规则；
 - P2/P3 门禁。
 
@@ -287,13 +287,13 @@
 - 固定随机种子可复现；
 - 正常加速不被持续判为外部接触；
 - `contact_score` 明确不是概率；
-- P1 未通过时不启动 P2 主体实现。
+- P1-V 未通过时不启动 P2 主体实现。
 
 ### 前置依赖
 
-- P1 通过并经审查；
+- P1-V 通过并经审查；
 - Simulink 同学提供受控场景和可信运行数据；
-- 项目负责人冻结 P2/P3 门禁。
+- 项目负责人提供经审查的 P2/P3 子门框架并在实验前批准量化门限。
 
 ### 交接对象
 
@@ -325,7 +325,7 @@
 ### 协作但不主责目录
 
 - 审查 `common/schemas/scenario_config.schema.json`、
-  `common/schemas/system_state.schema.json` 和
+  `common/schemas/system_state_snapshot.schema.json` 和
   `common/schemas/validation_report.schema.json` 的可用性；
 - 不直接修改 `01_plant/**`、`02_observer/**`、`04_classification/**` 或
   `08_sil/**` 的主体实现。
@@ -358,12 +358,12 @@
 - 不修改公共字段语义；
 - 正确显示 `NOT RUN`、`FAIL` 和低可信状态；
 - 不把占位数据展示为真实实验；
-- P1 门禁前不开发完整 App。
+- P1-V 门禁前不开发完整 App。
 
 ### 前置依赖
 
-- 公共接口和报告 Schema 冻结；
-- P1 通过后获得真实运行数据。
+- 公共接口和报告 Schema 获批；
+- P1-V 通过后获得真实运行数据。
 
 ### 交接对象
 
@@ -381,7 +381,7 @@
 
 ### 负责目录
 
-`08_sil/**` 的 README 骨架已经建立。主算法和接口冻结后，由该同学添加主体实现并
+`08_sil/**` 的 README 骨架已经建立。主算法有效且接口获批后，由该同学添加主体实现并
 主责：
 
 - C/C++、头文件、CMake、CTest、基准和 SIL：`08_sil/**`。
@@ -402,7 +402,7 @@
 
 ### 输入接口
 
-- 冻结的公共契约和可复验 MATLAB 参考；
+- 已批准的公共契约和可复验 MATLAB 参考；
 - 测试向量、容差、采样时间和运行平台约束。
 
 ### 输出接口
@@ -425,8 +425,8 @@
 
 ### 前置依赖
 
-- P1 通过；
-- MATLAB 主实现和公共接口冻结；
+- P1-V 通过；
+- MATLAB 主实现有效且公共接口获批；
 - Simulink 同学提供参考数据。
 
 ### 交接对象
@@ -436,7 +436,7 @@
 
 ### 禁止越界
 
-- 不在算法未冻结时自行改变模型；
+- 不在所依赖算法尚未验证、接口尚未获批时自行改变模型；
 - 不修改公共接口而不同步文档和 Schema；
 - 不把仅编译成功写成算法一致性通过。
 

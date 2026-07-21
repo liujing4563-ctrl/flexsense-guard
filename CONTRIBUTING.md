@@ -15,7 +15,7 @@
 提交信息使用 Conventional Commits：
 
 ```text
-docs: freeze project scope and stage gates
+docs: approve project scope and review stage gates
 fix: make Python package installable
 test: validate public interface schemas
 ```
@@ -52,8 +52,9 @@ MATLAB/Octave、C/SIL、App 或其他环境未运行时，必须在 PR 中标为
 - `confidence_score` 与 `contact_score` 都不是概率。
 - 禁止 `contact_probability`。
 - 负载侧真值只用于评价，不得进入运行时算法。
-- 区分 `torque_command_nm`、`motor_torque_applied_nm` 和
-  `motor_torque_measured_nm`，Observer 不得直接使用原始指令。
+- `ActuatorCommand`、`PlantInputTrace`、`TorqueFeedback` 和 `ObserverInput` 分责；
+  Observer 不得读取原始指令、`motor_torque_applied_nm` 或 Plant 真值。
+- Plant 真值配置与版本化名义参数库必须隔离，在线校准只能更新名义参数版本。
 - 历史运行结果与当前可行性结论分开记录；证据无效或不足时使用
   `NOT_VERIFIED`。
 - 不提交专利、比赛敏感材料、个人数据或大规模生成结果。

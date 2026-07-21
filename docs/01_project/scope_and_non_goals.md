@@ -22,8 +22,8 @@
 ## 数据边界
 
 - Plant 真实参数与 Observer 名义参数必须分离。
-- 力矩命令、实际施加力矩和测量力矩必须分离；Observer 不得直接使用未经执行器
-  模型处理的原始力矩指令。
+- 执行器命令、Plant 实际输入和 Observer 可见转矩反馈必须分离；Observer 不得读取
+  原始力矩指令或 `motor_torque_applied_nm`。
 - `true_load_position`、`true_load_velocity` 和 `true_external_torque`
   只能进入评价模块。
 - 仿真真值不得进入 Observer、Confidence、Classification、Mode Manager 或
@@ -34,15 +34,19 @@
 
 ## 当前阶段范围
 
-本工作包只完成：
+本工作包只负责：
 
-- 项目范围、架构和公共接口冻结；
-- P1、P2、P3 门禁冻结；
+- 批准项目范围，审查架构和公共接口候选规范；
+- 审查 P1/P2/P3 门禁框架；
 - 人员职责与交接规则；
 - 仓库治理；
 - Python 包安装、公共类型和基础 CI。
 
 本工作包不修改 Plant、Observer、分类器、可信评分、控制器等主体算法。
+
+规范、实现和验证的当前状态只以
+[`current_status_and_next_steps.md`](../current_status_and_next_steps.md) 为准。阶段框架
+通过审查不表示跨语言实现完成，也不表示量化门限已经获得实验支持。
 
 ## 明确非目标
 
@@ -63,5 +67,5 @@
 ## 范围变更规则
 
 新增技术方向必须说明所属路线、前置门禁、负责人、交付物和删除项，并通过独立
-PR 审查。任何同学或 Codex 都不得自行扩大范围。P1 未形成有效、充分且可复现的
+PR 审查。任何同学或 Codex 都不得自行扩大范围。P1-V 未形成有效、充分且可复现的
 `PASS` 证据前，不得启动 P2、P3、App、C/SIL 或测试 Agent 主体开发。
