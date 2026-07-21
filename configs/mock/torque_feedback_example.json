@@ -1,0 +1,15 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/torque_feedback.schema.json",
+    "purpose": "仅用于转矩反馈契约联调，不代表独立转矩传感器结果",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.5,
+        "motor_torque_feedback_nm": 1.01,
+        "torque_source": "CURRENT_ESTIMATE",
+        "torque_valid": true,
+        "torque_std_nm": 0.04
+    }
+}

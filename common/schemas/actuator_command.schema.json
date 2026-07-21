@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/actuator_command.schema.json",
+  "title": "执行器命令",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "torque_command_nm": {"type": "number"}
+  },
+  "required": ["schema_version", "timestamp_s", "torque_command_nm"],
+  "additionalProperties": false
+}

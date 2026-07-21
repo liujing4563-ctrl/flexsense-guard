@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/observer_estimate.schema.json",
+  "title": "Observer 估计输出",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "estimated_load_position_rad": {"type": "number"},
+    "estimated_load_velocity_rad_s": {"type": "number"},
+    "estimated_torsion_rad": {"type": "number"},
+    "estimated_external_torque_nm": {"type": "number"},
+    "normalized_innovation_squared": {"type": "number", "minimum": 0},
+    "estimate_finite": {"type": "boolean"},
+    "observer_diverged": {"type": "boolean"}
+  },
+  "required": ["schema_version", "timestamp_s", "estimated_load_position_rad", "estimated_load_velocity_rad_s", "estimated_torsion_rad", "estimated_external_torque_nm", "normalized_innovation_squared", "estimate_finite", "observer_diverged"],
+  "additionalProperties": false
+}

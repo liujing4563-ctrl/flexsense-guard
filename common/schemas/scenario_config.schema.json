@@ -1,70 +1,47 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/scenario_config.schema.json",
-    "title": "场景配置",
-    "description": "FlexSense-Guard 仿真场景的公共配置",
-    "type": "object",
-    "properties": {
-        "schema_version": {
-            "type": "string",
-            "description": "符合语义化版本格式的 Schema 版本",
-            "pattern": "^\\d+\\.\\d+\\.\\d+$"
-        },
-        "scenario_id": {
-            "type": "string",
-            "description": "场景唯一标识"
-        },
-        "payload_level": {
-            "type": "string",
-            "enum": ["light", "medium", "heavy"],
-            "description": "负载等级"
-        },
-        "sample_time_s": {
-            "type": "number",
-            "exclusiveMinimum": 0,
-            "description": "仿真采样时间，单位为秒"
-        },
-        "duration_s": {
-            "type": "number",
-            "exclusiveMinimum": 0,
-            "description": "仿真总时长，单位为秒"
-        },
-        "collision_time_s": {
-            "type": "number",
-            "minimum": -1,
-            "description": "外部接触注入时刻，单位为秒；-1 表示不注入"
-        },
-        "encoder_dropout_rate": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1,
-            "description": "编码器丢包比例"
-        },
-        "current_noise_std": {
-            "type": "number",
-            "minimum": 0,
-            "description": "电流测量噪声标准差，单位为安培"
-        },
-        "torque_constant_error": {
-            "type": "number",
-            "description": "力矩常数偏差比例，例如 0.1 表示 10% 偏差"
-        },
-        "observer_parameter_mismatch": {
-            "type": "number",
-            "description": "Observer 参数失配比例，例如 0.2 表示 20% 失配"
-        },
-        "random_seed": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "用于复现的固定非负随机种子，包含种子 0"
-        }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/scenario_config.schema.json",
+  "title": "场景配置",
+  "description": "关联不可变 Plant 真值配置与独立名义参数版本，不内嵌运行时真值",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "configuration_id": {"type": "string", "minLength": 1},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "plant_true_configuration_id": {"type": "string", "minLength": 1},
+    "nominal_parameter_version": {"type": "string", "minLength": 1},
+    "dataset_partition": {
+      "type": "string",
+      "enum": ["TUNING", "ACCEPTANCE", "EVALUATION"]
     },
-    "required": [
-        "schema_version",
-        "scenario_id",
-        "payload_level",
-        "sample_time_s",
-        "duration_s"
-    ],
-    "additionalProperties": false
+    "payload_level": {
+      "type": "string",
+      "enum": ["light", "medium", "heavy"]
+    },
+    "sample_time_s": {"type": "number", "exclusiveMinimum": 0},
+    "duration_s": {"type": "number", "exclusiveMinimum": 0},
+    "collision_time_s": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "null 表示不注入接触，不使用负数哨兵值"
+    },
+    "encoder_dropout_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "current_noise_std_a": {"type": "number", "minimum": 0},
+    "torque_constant_error_ratio": {"type": "number"},
+    "observer_parameter_mismatch_ratio": {"type": "number"},
+    "random_seed": {"type": "integer", "minimum": 0}
+  },
+  "required": [
+    "schema_version",
+    "configuration_id",
+    "scenario_id",
+    "plant_true_configuration_id",
+    "nominal_parameter_version",
+    "dataset_partition",
+    "payload_level",
+    "sample_time_s",
+    "duration_s",
+    "random_seed"
+  ],
+  "additionalProperties": false
 }

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/calibration_candidate.schema.json",
+  "title": "校准候选参数",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "base_parameter_version": {"type": "string", "minLength": 1},
+    "candidate_parameter_version": {"type": "string", "minLength": 1},
+    "parameter_values": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number"}
+    },
+    "generation_reason": {"type": "string", "minLength": 1},
+    "acceptance_window_id": {"type": "string", "minLength": 1}
+  },
+  "required": ["schema_version", "candidate_id", "base_parameter_version", "candidate_parameter_version", "parameter_values", "generation_reason", "acceptance_window_id"],
+  "additionalProperties": false
+}

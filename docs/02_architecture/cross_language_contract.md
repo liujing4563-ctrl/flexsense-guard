@@ -1,63 +1,75 @@
 # 跨语言契约矩阵
 
-## 目的与状态定义
+当前状态只以
+[`current_status_and_next_steps.md`](../current_status_and_next_steps.md) 为准。本矩阵记录
+v2 候选契约在各语言中的实际落地，不把规范审查解释为实现完成。
 
-本矩阵逐字段记录文档、Python、JSON Schema、MATLAB、C 和 App 的真实落地状态。
-字段语义冻结不代表算法已经实现，也不代表端到端链路已经验证。
+## 状态规则
 
-状态只能使用：
+本表的 Specification 使用 `DRAFT/REVIEWED/APPROVED/FROZEN`；实现使用
+`MISSING/PLACEHOLDER/PARTIAL/IMPLEMENTED/INVALID`。验证结果另行记录，不在本表
+混用。
 
-| 状态 | 含义 |
-|---|---|
-| `FROZEN` | 该层的字段名称、类型、单位和枚举已经对齐并受契约测试约束 |
-| `PARTIAL` | 已有部分定义或实现，但仍存在缺项、候选值或未验证映射 |
-| `NOT FROZEN` | 已有旧实现或草案，但尚未迁移到当前权威契约 |
-| `MISSING` | 当前仓库中不存在该层映射 |
-| `NOT APPLICABLE` | 该字段按架构不应出现在该层 |
+## DTO 矩阵
 
-## 字段矩阵
+| DTO | Specification | Python | Schema | MATLAB | C | App |
+|---|---|---|---|---|---|---|
+| `ActuatorCommand` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `PlantInputTrace` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `RawMotorMeasurement` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `TorqueFeedback` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `SignalHealthStatus` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ObserverInput` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ObserverEstimate` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ConfidenceOutput` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ClassificationOutput` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `ModeDecision` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `SystemStateSnapshot` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `ControlCommand` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `ImmutablePlantTrueConfig` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `INVALID` | `MISSING` | `MISSING` |
+| `NominalParameterVersion` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `CalibrationCandidate` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `CalibrationDecision` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| `ArtifactIndexEntry` | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
+| Stage Validation Report | `REVIEWED` | `IMPLEMENTED` | `IMPLEMENTED` | `MISSING` | `MISSING` | `MISSING` |
 
-| 字段 | 含义 | 单位 | 文档 | Python | Schema | MATLAB | C | App | 当前状态 |
-|---|---|---:|---|---|---|---|---|---|---|
-| `timestamp_s` | 当前样本时间 | s | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `torque_command_nm` | 执行器模型前的电机侧力矩指令 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `motor_torque_applied_nm` | 执行器约束后实际施加到 Plant 的电机侧力矩 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `motor_torque_measured_nm` | Observer 可获得的电机侧测量或估计力矩 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `motor_position_rad` | 电机侧角位置测量 | rad | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `motor_velocity_rad_s` | 电机侧角速度测量 | rad/s | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `motor_current_a` | 电机电流测量 | A | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `estimated_load_position_rad` | 负载侧角位置估计 | rad | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `estimated_load_velocity_rad_s` | 负载侧角速度估计 | rad/s | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `estimated_torsion_rad` | `theta_m/N-theta_l` 的估计 | rad | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `estimated_external_torque_nm` | 负载侧外部关节扰动力矩估计 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `innovation_norm` | Observer 创新残差范数 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `confidence_score` | 工程可信评分，不是概率 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `contact_score` | 接触证据评分，不是概率 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `classification_state` | 四值分类状态 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `operation_mode` | 四值运行模式 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `valid_flag` | 当前状态是否可供下游使用 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
-| `reason_codes` | 无效、降级或回退原因数组 | - | `PARTIAL` | `PARTIAL` | `PARTIAL` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+MATLAB 标记为 `INVALID` 表示仓库已有旧实现，但字段、方程或输入边界不符合 v2；
+`MISSING` 表示尚不存在相应映射。Python/Schema 的 `IMPLEMENTED` 只表示契约结构和
+测试存在，不代表主体算法实现。
 
-`reason_codes` 保持 `PARTIAL`，因为可信设计文档已经提出扩展候选原因码，而公共
-Schema 和 Python 当前仍只包含基础枚举。本 PR 不把候选原因码伪装成已实现接口。
+## 关键字段边界
+
+| 字段 | 所属 DTO | Observer 可见 | 说明 |
+|---|---|---|---|
+| `torque_command_nm` | `ActuatorCommand` | 否 | 控制意图 |
+| `motor_torque_applied_nm` | `PlantInputTrace` | 否 | 仿真 Plant 实际输入追踪值 |
+| `motor_torque_feedback_nm` | `TorqueFeedback`、`ObserverInput` | 是 | 带来源、有效性和标准差的反馈 |
+| `normalized_innovation_squared` | `ObserverEstimate` | 输出 | 不混合原始 rad/rad/s L2 范数 |
+| `contact_hazard_latched` | `ModeDecision` | N/A | 独立危险记忆 |
+| `safety_action_level` | `ModeDecision`、`ControlCommand` | N/A | 最小安全动作包络 |
+
+## 破坏性迁移
+
+v1 的 `MotorSideMeasurement`、`motor_torque_measured_nm` 和扁平 `SystemState` 被 v2
+专用 DTO 替代。旧数据只能由明确的离线迁移器转换，不在当前类型中保留兼容别名。
 
 ## 权威来源
 
 | 内容 | 权威来源 |
 |---|---|
-| 字段语义、单位、范围 | [`interface_spec.md`](interface_spec.md) |
-| 符号和力矩所在侧 | [`glossary_and_symbols.md`](glossary_and_symbols.md) |
+| 当前阶段状态 | [`current_status_and_next_steps.md`](../current_status_and_next_steps.md) |
+| 字段、单位和失效规则 | [`interface_spec.md`](interface_spec.md) |
+| 数学符号 | [`glossary_and_symbols.md`](glossary_and_symbols.md) |
 | JSON 结构 | `common/schemas/*.schema.json` |
-| Python 参考类型 | `python/flexsense_guard/types.py` |
-| MATLAB 信号定义 | 由 Simulink 同学在 `01_plant/**`、`02_observer/**` 和 runner 中迁移 |
-| C/C++ 类型 | 由嵌入式 Linux 同学在 `08_sil/include/**` 中实现 |
-| App 映射 | 由计算机软件同学在 `07_app/**` 中实现 |
+| Python 类型 | `python/flexsense_guard/types.py` |
+| MATLAB 映射 | Simulink 同学负责的 Plant、Observer 和 runner |
+| C/C++ 类型 | 嵌入式 Linux 同学在 `08_sil/include/**` 实现 |
+| App 映射 | 软件同学在 `07_app/**` 实现 |
 
 ## 迁移规则
 
-1. 项目负责人冻结字段名称、单位、枚举、失效行为和版本规则。
-2. 模块负责同学在各自主责路径完成语言映射，不保留含糊兼容别名。
-3. 旧数据只能在模块边界显式转换，不能污染当前公共结构。
-4. 字段变更必须同步本矩阵、Mock、Schema、Python 类型和受影响测试。
-5. MATLAB、C 和 App 未共同回放前，跨语言契约整体保持 `PARTIAL`。
-6. 端到端通过只能由实际生产者、消费者和证据共同证明，不能由文档状态推断。
+1. 模块负责同学只能在自己的主责路径实现语言映射；
+2. 不保留含糊旧字段或自动回退别名；
+3. 公共字段变更同步文档、Schema、Python、Mock 和测试；
+4. MATLAB、C 和 App 未共同回放前，跨语言实现保持 `PARTIAL`；
+5. 端到端状态只能由真实生产者、消费者和证据决定。

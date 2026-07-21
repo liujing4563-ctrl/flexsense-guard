@@ -1,146 +1,279 @@
 # 公共接口规范
 
-## 适用范围
+本文件定义 v2 公共数据契约。当前规范、实现和验证状态只以
+[`current_status_and_next_steps.md`](../current_status_and_next_steps.md) 为准。
 
-本规范是 MATLAB、Python、C/C++、App 和测试工具之间的公共契约。字段名、单位、
-枚举和无效数据处理一旦变更，必须同步修改文档、JSON Schema、Python 类型、
-MATLAB 结构体定义和 C 头文件，并由受影响的模块负责同学审查。
+## 版本和破坏性变更
 
-## 分类状态
+v2 将原 `MotorSideMeasurement` 和扁平 `VirtualSensingEstimate/SystemState` 拆分为
+专用 DTO。旧字段 `motor_torque_nm`、`motor_torque_measured_nm` 以及旧聚合结构不再
+是当前权威接口，不保留静默兼容别名。
 
-公共分类状态只能使用：
+所有 v2 JSON DTO 使用 `schema_version="2.0.0"`。接口变更必须在独立 PR 中同步
+本文档、JSON Schema、Python 类型、Mock、契约测试和受影响语言映射，并获得模块
+负责同学确认。
 
-| 枚举值 | 含义 | 允许使用条件 |
-|---|---|---|
-| `NORMAL` | 正常运动 | 估计有效且没有持续振动或接触证据 |
-| `FLEXIBLE_VIBRATION` | 柔性振动 | P2 证据支持后使用 |
-| `EXTERNAL_CONTACT` | 外部接触 | P2 证据支持后使用 |
-| `LOW_CONFIDENCE` | 估计低可信 | 信号、模型或物理检查不满足要求 |
+## 公共枚举
 
-## 运行模式
-
-公共运行模式只能使用：
-
-| 枚举值 | 含义 | 默认控制原则 |
-|---|---|---|
-| `NORMAL_TRACKING` | 正常跟踪 | 使用名义跟踪策略 |
-| `VIBRATION_SUPPRESSION` | 振动抑制 | 降低振动并限制激励 |
-| `SAFE_SLOWDOWN` | 安全减速 | 限速、减速并保留可追溯原因 |
-| `LOW_CONFIDENCE_DEGRADED` | 低可信降级 | 使用保守参数和最小能力集 |
-
-## 电机侧输入 `MotorSideMeasurement`
-
-| 字段 | 类型 | 单位 | 合法范围 | 生产模块 | 消费模块 | 无效数据处理 |
-|---|---|---:|---|---|---|---|
-| `timestamp_s` | number | s | 有限且不小于 0，运行中单调不减 | Plant / 数据回放 | 全部运行时模块 | 标记时间戳无效，不更新 Observer |
-| `motor_position_rad` | number | rad | 有限值 | Plant / 编码器接口 | Signal Health、Observer | 标记编码器无效，保持或降级 |
-| `motor_velocity_rad_s` | number | rad/s | 有限值 | Plant / 速度估计 | Signal Health、Observer | 标记编码器无效，保持或降级 |
-| `motor_current_a` | number | A | 有限值 | Plant / 电流接口 | Signal Health、力矩换算 | 标记电流无效，不使用该值校准 |
-| `torque_command_nm` | number | Nm | 有限值 | Control / 场景发生器 | 执行器模型、Validation | 标记指令无效并进入保守模式；禁止直接输入 Observer |
-| `motor_torque_applied_nm` | number | Nm | 有限值 | 执行器模型 | Plant、转矩测量模型、Validation | 必须反映饱和和执行器约束；无效时停止案例 |
-| `motor_torque_measured_nm` | number | Nm | 有限值 | 转矩测量模型 / 电流换算 | Signal Health、Observer、Validation | 无效时不执行 Observer 更新 |
-| `encoder_valid` | boolean | - | `true` 或 `false` | Signal Health | Observer、Confidence | `false` 时禁止正常更新 |
-| `current_valid` | boolean | - | `true` 或 `false` | Signal Health | Observer、Confidence | `false` 时降低可信评分 |
-| `timestamp_valid` | boolean | - | `true` 或 `false` | Signal Health | 全部运行时模块 | `false` 时拒绝乱序样本 |
-| `saturation_flag` | boolean | - | `true` 或 `false` | Plant / 执行器接口 | Confidence、Control、Validation | `true` 时记录原因并限制控制 |
-
-### 力矩字段不变量
+### `ClassificationState`
 
 ```text
-torque_command_nm
--> saturation / actuator model
--> motor_torque_applied_nm
--> Plant
-
-motor_torque_applied_nm
--> torque measurement model
--> motor_torque_measured_nm
--> Observer
-```
-
-- `torque_command_nm` 是控制意图，不代表 Plant 实际收到的力矩。
-- `motor_torque_applied_nm` 是饱和和执行器模型之后实际施加到 Plant 的电机侧力矩。
-- `motor_torque_measured_nm` 是 Observer 可消费的电机侧测量力矩。
-- 没有独立测量模型时，可以暂定
-  `motor_torque_measured_nm = motor_torque_applied_nm + measurement_noise_nm`。
-- Observer 禁止直接消费 `torque_command_nm`。
-- 旧字段 `motor_torque_nm` 自本版本起为禁止字段。JSON Schema 和 Python 类型已
-  完成迁移；MATLAB 历史结构由 Simulink 同学在 P1 输入一致性任务中迁移。
-
-## 虚拟感知输出 `VirtualSensingEstimate`
-
-| 字段 | 类型 | 单位 | 合法范围 | 生产模块 | 消费模块 | 无效数据处理 |
-|---|---|---:|---|---|---|---|
-| `timestamp_s` | number | s | 有限且不小于 0 | Observer | 下游全部模块 | 与输入时间戳不一致时判无效 |
-| `estimated_load_position_rad` | number | rad | 有限值 | Observer | Classification、Control、Validation | `valid_flag=false` 时不得用于正常控制 |
-| `estimated_load_velocity_rad_s` | number | rad/s | 有限值 | Observer | Classification、Control、Validation | `valid_flag=false` 时不得用于正常控制 |
-| `estimated_torsion_rad` | number | rad | 有限值 | Observer | Confidence、Classification、Validation | 超物理范围时进入低可信 |
-| `estimated_external_torque_nm` | number | Nm | 有限值 | Observer | Confidence、Classification、Validation | 无效时不得解释为接触 |
-| `innovation_norm` | number | - | 有限且不小于 0 | Observer | Confidence、Validation | 非有限值时立即判无效 |
-| `confidence_score` | number | - | `[0,1]` | Confidence | Classification、Mode Manager、Validation | 超范围时判无效并降级 |
-| `contact_score` | number | - | `[0,1]` | Classification | Mode Manager、Validation | P2 前只作诊断，不驱动接触模式 |
-| `classification_state` | string | - | 四种分类状态之一 | Classification / Confidence | Mode Manager、Validation、App | 未知值按 `LOW_CONFIDENCE` 处理 |
-| `operation_mode` | string | - | 四种运行模式之一 | Mode Manager | Control、Validation、App | 未知值按 `LOW_CONFIDENCE_DEGRADED` 处理 |
-| `valid_flag` | boolean | - | `true` 或 `false` | Observer / Confidence | 下游全部模块 | `false` 时禁止正常控制 |
-| `reason_codes` | array[string] | - | 已登记原因码的数组 | Signal Health / Confidence | Validation、App | 未知原因码保留原文并进入低可信 |
-
-## 原因码
-
-当前基础原因码为：
-
-```text
-NONE
-INVALID_TIMESTAMP
-INVALID_ENCODER
-INVALID_CURRENT
-TORQUE_SATURATED
+NORMAL
+FLEXIBLE_VIBRATION
+EXTERNAL_CONTACT
 LOW_CONFIDENCE
 ```
 
-新增原因码必须保持可追溯、单一含义，并同步公共契约。
-
-## 仿真真值
-
-以下字段只允许出现在仿真结果和评价接口中：
+### `OperationMode`
 
 ```text
-true_load_position
-true_load_velocity
-true_external_torque
+NORMAL_TRACKING
+VIBRATION_SUPPRESSION
+SAFE_SLOWDOWN
+LOW_CONFIDENCE_DEGRADED
 ```
 
-Observer、Confidence、Classification、Mode Manager 和 Control 的输入结构中禁止
-出现这些字段。测试必须检查该不变量。
+### `TorqueSource`
 
-## 参数边界
+```text
+CURRENT_ESTIMATE
+TORQUE_SENSOR
+ACTUATOR_MODEL
+UNKNOWN
+```
 
-- Plant 使用真实仿真参数；Observer 使用独立的名义参数。
-- 两组参数不得引用同一可变对象。
-- Observer 名义参数必须记录与 Plant 参数的失配。
-- 参数值必须检查有限性、惯量和传动比为正、阻尼和摩擦非负。
-- 传动比方向统一为理想刚性关系 `theta_l = theta_m / N`。
-- `tau_s_load_nm` 统一表示负载侧弹性力矩；电机侧反射力矩在理想效率下为
-  `tau_s_load_nm / N`。
+### `SafetyActionLevel`
 
-## 术语约束
+```text
+NONE
+LIMITED
+SLOWDOWN
+STOP_REQUEST
+```
 
-- `confidence_score` 是工程可信评分，不是统计概率。
-- `contact_score` 是接触证据评分，不是概率。
-- 禁止字段 `contact_probability`。
-- 核心外扰输出统一使用 `estimated_external_torque_nm`。
-- 当前输出是外部关节扰动力矩。未给出 Jacobian、等效力臂和坐标变换时，不得
-  称为末端力。
+### `ReasonCode`
 
-## 版本与兼容
+```text
+NONE
+ENCODER_INVALID
+CURRENT_INVALID
+TIMESTAMP_INVALID
+TORQUE_INVALID
+DATA_STALE
+ACTUATOR_SATURATED
+INNOVATION_EXCESSIVE
+MODEL_MISMATCH_SUSPECTED
+EXTERNAL_DYNAMIC_SUSPECTED
+PHYSICAL_LIMIT_VIOLATION
+OBSERVER_DIVERGENCE
+LOW_CONFIDENCE
+CONTACT_HAZARD_LATCHED
+UNKNOWN_REASON
+```
 
-公共接口变更必须：
+`NONE` 只能单独出现；存在任何异常原因时不得同时包含 `NONE`。未知输入枚举必须
+映射为无效并保留 `UNKNOWN_REASON`，不能静默继续正常模式。
 
-1. 在独立 PR 中说明兼容性影响；
-2. 同步文档、Schema 和语言类型；
-3. 增加或修改一致性测试；
-4. 获得受影响模块负责同学确认；
-5. 不在同一 PR 中顺带修改主体算法。
+## 运行时输入契约
 
-当前字段语义、JSON Schema 和 Python 参考类型已经同步。MATLAB 输入结构、C/C++
-头文件和 App 映射尚未迁移，端到端契约状态为 `NOT_VERIFIED`。各语言状态见
-[`cross_language_contract.md`](cross_language_contract.md)。
+### `ActuatorCommand`
+
+| 字段 | 类型 | 单位 | 生产者 | 消费者 | 无效处理 |
+|---|---|---:|---|---|---|
+| `schema_version` | string | - | Controller | Actuator | 非 `2.0.0` 拒绝 |
+| `timestamp_s` | number | s | Controller | Actuator | 非有限、负值或乱序时拒绝 |
+| `torque_command_nm` | number | N·m | Controller | Actuator | 非有限时进入保守动作 |
+
+### `PlantInputTrace`
+
+| 字段 | 类型 | 单位 | 生产者 | 消费者 | 无效处理 |
+|---|---|---:|---|---|---|
+| `schema_version` | string | - | Actuator | Plant、Validation | 版本错误时停止案例 |
+| `timestamp_s` | number | s | Actuator | Plant、Validation | 非法时停止案例 |
+| `motor_torque_applied_nm` | number | N·m | Actuator | Plant、Validation | 非有限时停止案例 |
+| `saturation_active` | boolean | - | Actuator | Plant、Validation | 必须记录 |
+| `actuator_limit_nm` | number | N·m | Actuator | Validation | 必须为正且有限 |
+
+`PlantInputTrace` 属于仿真和离线追踪数据。Observer、Confidence、Classification、
+Mode Manager、Calibration 和 Controller 禁止读取 `motor_torque_applied_nm`。
+
+### `RawMotorMeasurement`
+
+| 字段 | 类型 | 单位 | 生产者 | 消费者 | 无效处理 |
+|---|---|---:|---|---|---|
+| `schema_version` | string | - | Plant/硬件适配器 | Feedback、Health | 版本错误时拒绝 |
+| `timestamp_s` | number | s | Plant/时钟 | Feedback、Health | 乱序或非有限时无效 |
+| `motor_position_rad` | number | rad | 编码器 | Health、ObserverInput builder | 无效时不更新 Observer |
+| `motor_velocity_rad_s` | number | rad/s | 速度估计 | Health、ObserverInput builder | 无效时不更新 Observer |
+| `motor_current_a` | number | A | 电流接口 | Torque Feedback、Health | 无效时禁止电流换算 |
+| `encoder_valid` | boolean | - | 原始采集层 | Health | `false` 为硬失效 |
+| `current_valid` | boolean | - | 原始采集层 | Feedback、Health | `false` 时电流来源无效 |
+| `timestamp_valid` | boolean | - | 原始采集层 | Health | `false` 为硬失效 |
+
+### `TorqueFeedback`
+
+| 字段 | 类型 | 单位 | 生产者 | 消费者 | 无效处理 |
+|---|---|---:|---|---|---|
+| `schema_version` | string | - | 转矩换算/传感器适配器 | Health、ObserverInput builder | 版本错误时拒绝 |
+| `timestamp_s` | number | s | Feedback | Health、ObserverInput builder | 与原始测量不同步时无效 |
+| `motor_torque_feedback_nm` | number | N·m | Feedback | Observer | 无效时不得用于预测输入 |
+| `torque_source` | enum | - | Feedback | Observer、Validation | `UNKNOWN` 时默认低可信 |
+| `torque_valid` | boolean | - | Feedback | Health、Observer | `false` 时禁止正常更新 |
+| `torque_std_nm` | number | N·m | Feedback | Observer、Confidence | 非负；未知时不得填零冒充确定值 |
+
+`motor_torque_feedback_nm` 可以来自电流换算、独立传感器或受控执行器模型估计，
+不保证来自独立力矩传感器，也不等同于实际施加力矩。
+
+### `SignalHealthStatus`
+
+包含 `timestamp_s`、`encoder_valid`、`current_valid`、`timestamp_valid`、
+`torque_valid`、`data_stale`、`saturation_active` 和 `reason_codes`。Signal Health 是
+这些状态的唯一生产者；原始测量对象不承载派生健康结论。
+
+### `ObserverInput`
+
+只允许包含：
+
+```text
+schema_version
+timestamp_s
+motor_position_rad
+motor_velocity_rad_s
+motor_torque_feedback_nm
+encoder_valid
+current_valid
+timestamp_valid
+torque_valid
+torque_std_nm
+```
+
+明确禁止：
+
+```text
+torque_command_nm
+motor_torque_applied_nm
+true_load_position_rad
+true_load_velocity_rad_s
+true_external_torque_nm
+Plant 真实参数
+```
+
+## 模块输出契约
+
+### `ObserverEstimate`
+
+包含负载位置、负载速度、扭转量和外部关节力矩估计。残差必须使用
+`normalized_innovation_squared`，或在后续版本中引入明确的逐通道归一化结构；不得
+把 rad 与 rad/s 原始残差直接求 L2 范数后声明为无量纲量。
+
+### `ConfidenceOutput`
+
+包含 `confidence_score`、`valid_flag`、`confidence_state` 和 `reason_codes`。
+`valid_flag` 是硬门控结果，`confidence_score` 是软评分，两者不可互相替代。
+
+### `ClassificationOutput`
+
+包含 `classification_state`、`contact_score` 和 `valid_flag`。`contact_score` 是工程
+证据评分，不是概率；P2-CONTACT 通过前不得驱动接触安全动作。
+
+### `ModeDecision`
+
+包含：
+
+```text
+operation_mode
+contact_hazard_latched
+safety_action_required
+safety_action_level
+reason_codes
+```
+
+`operation_mode` 表示运行策略，危险锁存表示危险记忆，安全动作级别表示 Controller
+必须执行的最小保守包络。低可信模式不得清除危险锁存或减弱安全动作。
+
+### `SystemStateSnapshot`
+
+只读聚合：`ObserverEstimate`、`ConfidenceOutput`、`ClassificationOutput` 和
+`ModeDecision` 的同时间戳快照。它用于 App、报告和离线 Validation，不由单个算法
+模块写入，也不得反向输入 Observer、Confidence 或 Classification。
+
+### `ControlCommand`
+
+| 字段 | 类型 | 单位 | 生产者 | 消费者 | 无效处理 |
+|---|---|---:|---|---|---|
+| `schema_version` | string | - | Controller | Actuator、Validation | 版本不匹配时拒绝 |
+| `timestamp_s` | number | s | Controller | Actuator、Validation | 非法或乱序时拒绝 |
+| `requested_torque_nm` | number | N·m | Controller | Validation | 非有限时请求失效 |
+| `limited_torque_nm` | number | N·m | Controller | Actuator、Validation | 非有限时进入保守动作 |
+| `safety_action_level` | enum | - | Controller | Actuator、Validation | 未知值按最保守边界处理并拒绝正常执行 |
+| `operation_mode` | enum | - | Controller | App、Validation | 未知值进入低可信处理 |
+| `valid_until_s` | number | s | Controller | Actuator | 早于当前时间即过期拒绝 |
+| `reason_codes` | array | - | Controller | App、Validation | 缺失或冲突时对象无效 |
+
+控制限制必须满足 `ModeDecision.safety_action_level`，具体转矩、速度和停止门限尚未
+确定，需要 P3 和控制实验批准。
+
+## 配置与校准契约
+
+### `ImmutablePlantTrueConfig`
+
+单次实验开始后不可修改，只供 Scenario、Plant 和 Offline Validation 使用。当前
+场景 Schema 是该配置的入口之一；真实参数不得复制到运行时 DTO。
+
+### `NominalParameterVersion`
+
+由 `VersionedNominalParameterStore` 产生，Observer、Confidence、Calibration 和
+Controller 只读消费。它记录 `parameter_version`、`base_parameter_version`、
+`parameter_values`、`created_reason` 和 `checksum_sha256`。版本、校验或数值无效时
+拒绝加载并保持上一有效版本；不得回退到默认零值。
+
+### `CalibrationCandidate`
+
+由 Calibration 产生、Acceptance 消费，包含 `candidate_id`、
+`base_parameter_version`、`candidate_parameter_version`、`parameter_values`、
+`generation_reason` 和 `acceptance_window_id`。候选版本与 base 相同、base 不是当前
+批准版本、字段非有限、越界或包含真值来源时拒绝，不进入更新流程。
+
+### `CalibrationDecision`
+
+由 Acceptance 产生，名义参数库和证据记录消费。它包含 `candidate_id`、`decision`、
+`decision_reason_codes` 和 `rollback_target_version`。`decision` 只能是 `UPDATE`、
+`HOLD` 或 `ROLLBACK`。未知决定、缺少原因或候选不匹配时按 `HOLD` 拒绝执行；
+`ROLLBACK` 必须指向已存在的上一有效版本，不能把参数或状态清零。
+
+### `ArtifactIndexEntry`
+
+由阶段 runner 或报告工具产生，Validation、审查者和报告系统消费。字段包括
+`artifact_id`、`artifact_type`、`uri`、`checksum_sha256`、`size_bytes`、`owner` 和
+`available`。URI 不可访问、SHA-256 不匹配、大小不一致或保管人缺失时，artifact
+无效；必需 artifact 无效时阶段报告不得 `PASS`。索引只描述证据，不填虚构性能值。
+
+## 仿真真值边界
+
+以下字段只允许出现在 Plant 内部或离线评价数据中：
+
+```text
+true_load_position_rad
+true_load_velocity_rad_s
+true_external_torque_nm
+motor_torque_applied_nm
+```
+
+契约测试必须证明 `ObserverInput`、`ObserverEstimate`、`ConfidenceOutput`、
+`ClassificationOutput`、`ModeDecision` 和 `ControlCommand` 不含这些字段。
+
+## 验证报告
+
+验证报告采用公共 evidence envelope 加阶段 payload。P1、P2、P3、SIL 和 Integration
+只要求各自适用指标；不适用指标必须省略，不得使用 `0.0` 表示 N/A。完整定义见
+[`evidence_management.md`](../03_validation/evidence_management.md) 和
+`common/schemas/validation_report.schema.json`。
+
+## 失效和兼容规则
+
+- 数值必须有限；时间戳非负且运行时单调不减；
+- 评分限制在 `[0,1]`，标准差和误差指标非负；
+- 未知枚举、版本不匹配或必需字段缺失时拒绝对象；
+- `valid_flag=false` 的估计不得用于正常控制；
+- v1 到 v2 是破坏性迁移，旧数据只能在明确的离线转换边界处理；
+- 禁止在当前 DTO 中保留含糊旧字段作为兼容别名。

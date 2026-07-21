@@ -1,0 +1,14 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/calibration_decision.schema.json",
+    "purpose": "仅用于 CalibrationDecision 契约联调，不代表候选已验收",
+    "payload": {
+        "schema_version": "2.0.0",
+        "candidate_id": "mock-candidate-001",
+        "decision": "HOLD",
+        "decision_reason_codes": ["MODEL_MISMATCH_SUSPECTED"],
+        "rollback_target_version": null
+    }
+}

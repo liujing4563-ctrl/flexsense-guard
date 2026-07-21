@@ -1,0 +1,17 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/artifact_index_entry.schema.json",
+    "purpose": "仅用于 ArtifactIndexEntry 契约联调，不代表证据可用",
+    "payload": {
+        "schema_version": "2.0.0",
+        "artifact_id": "mock-artifact-001",
+        "artifact_type": "MOCK_LOG",
+        "uri": "results/mock/not-present.log",
+        "checksum_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "size_bytes": 128,
+        "owner": "项目负责人同学",
+        "available": false
+    }
+}

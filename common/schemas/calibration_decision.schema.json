@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/calibration_decision.schema.json",
+  "title": "校准验收决定",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "decision": {"type": "string", "enum": ["UPDATE", "HOLD", "ROLLBACK"]},
+    "decision_reason_codes": {"$ref": "contract_common.schema.json#/$defs/reason_codes"},
+    "rollback_target_version": {"type": ["string", "null"]}
+  },
+  "required": ["schema_version", "candidate_id", "decision", "decision_reason_codes", "rollback_target_version"],
+  "allOf": [
+    {
+      "if": {"properties": {"decision": {"const": "ROLLBACK"}}},
+      "then": {"properties": {"rollback_target_version": {"type": "string", "minLength": 1}}},
+      "else": {"properties": {"rollback_target_version": {"type": "null"}}}
+    }
+  ],
+  "additionalProperties": false
+}

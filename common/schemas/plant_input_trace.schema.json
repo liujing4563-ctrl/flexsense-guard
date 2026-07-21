@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/plant_input_trace.schema.json",
+  "title": "Plant 输入追踪",
+  "description": "仅供 Plant 和离线验证使用，禁止 Observer 读取",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "motor_torque_applied_nm": {"type": "number"},
+    "saturation_active": {"type": "boolean"},
+    "actuator_limit_nm": {"type": "number", "exclusiveMinimum": 0}
+  },
+  "required": ["schema_version", "timestamp_s", "motor_torque_applied_nm", "saturation_active", "actuator_limit_nm"],
+  "additionalProperties": false
+}

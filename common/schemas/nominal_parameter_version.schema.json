@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/nominal_parameter_version.schema.json",
+  "title": "名义参数版本",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "parameter_version": {"type": "string", "minLength": 1},
+    "base_parameter_version": {"type": ["string", "null"]},
+    "parameter_values": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number"}
+    },
+    "created_reason": {"type": "string", "minLength": 1},
+    "checksum_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "required": ["schema_version", "parameter_version", "base_parameter_version", "parameter_values", "created_reason", "checksum_sha256"],
+  "additionalProperties": false
+}

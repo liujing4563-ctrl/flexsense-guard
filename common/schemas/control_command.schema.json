@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/control_command.schema.json",
+  "title": "控制命令",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "requested_torque_nm": {"type": "number"},
+    "limited_torque_nm": {"type": "number"},
+    "safety_action_level": {"$ref": "contract_common.schema.json#/$defs/safety_action_level"},
+    "operation_mode": {"$ref": "contract_common.schema.json#/$defs/operation_mode"},
+    "valid_until_s": {"type": "number", "minimum": 0},
+    "reason_codes": {"$ref": "contract_common.schema.json#/$defs/reason_codes"}
+  },
+  "required": ["schema_version", "timestamp_s", "requested_torque_nm", "limited_torque_nm", "safety_action_level", "operation_mode", "valid_until_s", "reason_codes"],
+  "additionalProperties": false
+}

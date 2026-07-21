@@ -1,0 +1,14 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/plant_input_trace.schema.json",
+    "purpose": "仅用于 PlantInputTrace 契约联调，不代表 Plant 已实现",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.5,
+        "motor_torque_applied_nm": 1.0,
+        "saturation_active": true,
+        "actuator_limit_nm": 1.0
+    }
+}

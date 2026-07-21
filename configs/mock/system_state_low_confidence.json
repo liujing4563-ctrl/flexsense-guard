@@ -2,20 +2,45 @@
     "fixture_type": "MOCK",
     "data_source": "MOCK",
     "valid_for_algorithm_evaluation": false,
-    "schema_path": "common/schemas/system_state.schema.json",
+    "schema_path": "common/schemas/system_state_snapshot.schema.json",
     "purpose": "仅用于 App 低可信降级接口联调，不是故障实验结果",
     "payload": {
+        "schema_version": "2.0.0",
         "timestamp_s": 1.8,
-        "estimated_load_position_rad": 0.0,
-        "estimated_load_velocity_rad_s": 0.0,
-        "estimated_torsion_rad": 0.0,
-        "estimated_external_torque_nm": 0.0,
-        "innovation_norm": 4.5,
-        "confidence_score": 0.1,
-        "contact_score": 0.0,
-        "classification_state": "LOW_CONFIDENCE",
-        "operation_mode": "LOW_CONFIDENCE_DEGRADED",
-        "valid_flag": false,
-        "reason_codes": ["INVALID_ENCODER", "LOW_CONFIDENCE"]
+        "observer_estimate": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 1.8,
+            "estimated_load_position_rad": 0.02,
+            "estimated_load_velocity_rad_s": 0.04,
+            "estimated_torsion_rad": 0.003,
+            "estimated_external_torque_nm": 0.08,
+            "normalized_innovation_squared": 4.5,
+            "estimate_finite": true,
+            "observer_diverged": false
+        },
+        "confidence_output": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 1.8,
+            "confidence_score": 0.1,
+            "valid_flag": false,
+            "confidence_state": "HARD_INVALID",
+            "reason_codes": ["ENCODER_INVALID", "LOW_CONFIDENCE"]
+        },
+        "classification_output": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 1.8,
+            "classification_state": "LOW_CONFIDENCE",
+            "contact_score": 0.15,
+            "valid_flag": false
+        },
+        "mode_decision": {
+            "schema_version": "2.0.0",
+            "timestamp_s": 1.8,
+            "operation_mode": "LOW_CONFIDENCE_DEGRADED",
+            "contact_hazard_latched": false,
+            "safety_action_required": true,
+            "safety_action_level": "LIMITED",
+            "reason_codes": ["ENCODER_INVALID", "LOW_CONFIDENCE"]
+        }
     }
 }

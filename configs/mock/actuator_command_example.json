@@ -1,0 +1,12 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/actuator_command.schema.json",
+    "purpose": "仅用于 ActuatorCommand 契约联调，不代表真实控制输出",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.5,
+        "torque_command_nm": 1.2
+    }
+}

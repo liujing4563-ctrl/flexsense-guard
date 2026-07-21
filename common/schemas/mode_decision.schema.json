@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/mode_decision.schema.json",
+  "title": "模式和危险决定",
+  "type": "object",
+  "properties": {
+    "schema_version": {"$ref": "contract_common.schema.json#/$defs/schema_version"},
+    "timestamp_s": {"$ref": "contract_common.schema.json#/$defs/timestamp_s"},
+    "operation_mode": {"$ref": "contract_common.schema.json#/$defs/operation_mode"},
+    "contact_hazard_latched": {"type": "boolean"},
+    "safety_action_required": {"type": "boolean"},
+    "safety_action_level": {"$ref": "contract_common.schema.json#/$defs/safety_action_level"},
+    "reason_codes": {"$ref": "contract_common.schema.json#/$defs/reason_codes"}
+  },
+  "required": ["schema_version", "timestamp_s", "operation_mode", "contact_hazard_latched", "safety_action_required", "safety_action_level", "reason_codes"],
+  "allOf": [
+    {
+      "if": {"properties": {"contact_hazard_latched": {"const": true}}},
+      "then": {
+        "properties": {
+          "safety_action_required": {"const": true},
+          "safety_action_level": {"enum": ["SLOWDOWN", "STOP_REQUEST"]},
+          "reason_codes": {"contains": {"const": "CONTACT_HAZARD_LATCHED"}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"safety_action_required": {"const": false}}},
+      "then": {"properties": {"safety_action_level": {"const": "NONE"}}},
+      "else": {"properties": {"safety_action_level": {"enum": ["LIMITED", "SLOWDOWN", "STOP_REQUEST"]}}}
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,18 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/nominal_parameter_version.schema.json",
+    "purpose": "仅用于名义参数版本契约联调，不代表已验收参数",
+    "payload": {
+        "schema_version": "2.0.0",
+        "parameter_version": "mock-nominal-v1",
+        "base_parameter_version": null,
+        "parameter_values": {
+            "shaft_stiffness_nm_rad": 120.0,
+            "shaft_damping_nms_rad": 0.8
+        },
+        "created_reason": "MOCK_CONTRACT_ONLY",
+        "checksum_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+}

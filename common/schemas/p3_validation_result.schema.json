@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/common/schemas/p3_validation_result.schema.json",
+  "title": "P3 可信失效结果",
+  "type": "object",
+  "properties": {
+    "p3_degrade_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "p3_action_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "p3_recovery_decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
+    "confidence_drop": {"type": "number", "minimum": 0, "maximum": 1},
+    "safety_action_level": {"$ref": "contract_common.schema.json#/$defs/safety_action_level"},
+    "recovery_time_s": {"type": "number", "minimum": 0},
+    "false_degrade_count": {"type": "integer", "minimum": 0},
+    "missed_degrade_count": {"type": "integer", "minimum": 0}
+  },
+  "required": ["p3_degrade_decision", "p3_action_decision", "p3_recovery_decision", "confidence_drop", "safety_action_level", "false_degrade_count", "missed_degrade_count"],
+  "additionalProperties": false
+}

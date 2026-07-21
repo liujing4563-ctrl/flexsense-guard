@@ -1,0 +1,17 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/raw_motor_measurement.schema.json",
+    "purpose": "仅用于原始电机侧测量契约联调，不代表硬件采集结果",
+    "payload": {
+        "schema_version": "2.0.0",
+        "timestamp_s": 0.5,
+        "motor_position_rad": 0.12,
+        "motor_velocity_rad_s": 0.3,
+        "motor_current_a": 0.8,
+        "encoder_valid": true,
+        "current_valid": true,
+        "timestamp_valid": true
+    }
+}
