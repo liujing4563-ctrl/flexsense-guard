@@ -35,6 +35,8 @@
 
 - [`team_responsibilities.md`](04_collaboration/team_responsibilities.md)：同学间职责边界
 - [`issue_backlog.md`](04_collaboration/issue_backlog.md)：阶段任务映射
+- [`p1_model_input_handoff.md`](04_collaboration/p1_model_input_handoff.md)：P1 模型和输入一致性修复交接单
+- [`repository_cleanup_log.md`](04_collaboration/repository_cleanup_log.md)：旧 PR、stash 和分支迁移风险
 - [`git_workflow.md`](04_collaboration/git_workflow.md)：分支与 PR 工作流
 
 ## 跨类别治理记录

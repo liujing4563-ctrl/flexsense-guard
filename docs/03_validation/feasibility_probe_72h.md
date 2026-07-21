@@ -152,3 +152,8 @@ load_velocity_baseline = motor_velocity / gear_ratio
 仓库已有 P1 MATLAB 历史执行结果 `FAIL`，但证据有效性为
 `INVALID / INSUFFICIENT`。当前 P1 可行性结论为 `NOT_VERIFIED`。当前工作包不
 删除旧记录，也不运行或宣称完成 P2/P3。P2 和 P3 保持阻断。
+
+下一步不是调 Q、R、P 或直接重跑旧 runner，而是由 Simulink 同学先完成
+[`P1 双惯量模型与 Plant/Observer 输入一致性修复交接单`](../04_collaboration/p1_model_input_handoff.md)
+中的模型、输入、随机种子和测试修复。三负载、10 seed 的正式复验只能在前置
+有效性检查通过后开始。
