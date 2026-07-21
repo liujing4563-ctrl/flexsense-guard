@@ -1,63 +1,87 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/system_state.schema.json",
-    "title": "SystemState",
-    "description": "System state estimation output from the observer and confidence modules",
+    "title": "系统状态",
+    "description": "Observer、Confidence、Classification 和 Mode Manager 共同产生的公共状态输出",
     "type": "object",
     "properties": {
         "timestamp_s": {
             "type": "number",
             "minimum": 0,
-            "description": "Current simulation time [s]"
+            "description": "当前仿真时间，单位为秒"
         },
         "estimated_load_position_rad": {
             "type": "number",
-            "description": "Estimated load-side position [rad]"
+            "description": "负载侧位置估计，单位为弧度"
         },
         "estimated_load_velocity_rad_s": {
             "type": "number",
-            "description": "Estimated load-side velocity [rad/s]"
+            "description": "负载侧速度估计，单位为弧度每秒"
         },
         "estimated_torsion_rad": {
             "type": "number",
-            "description": "Estimated torsional deflection (theta_m/N - theta_l) [rad]"
+            "description": "扭转角估计 theta_m/N - theta_l，单位为弧度"
         },
         "estimated_external_torque_nm": {
             "type": "number",
-            "description": "Estimated external disturbance torque [Nm]"
+            "description": "外部关节扰动力矩估计，单位为牛米"
         },
         "innovation_norm": {
             "type": "number",
             "minimum": 0,
-            "description": "L2 norm of the EKF innovation vector"
+            "description": "Observer 创新残差的二范数"
         },
         "confidence_score": {
             "type": "number",
             "minimum": 0,
             "maximum": 1,
-            "description": "Confidence score [0, 1]; higher = more trustworthy. NOT a probability."
+            "description": "工程可信评分，越高表示越可信，不是概率"
         },
         "contact_score": {
             "type": "number",
             "minimum": 0,
             "maximum": 1,
-            "description": "Contact evidence score [0, 1]; NOT a probability."
+            "description": "接触证据评分，不是概率"
+        },
+        "classification_state": {
+            "type": "string",
+            "enum": [
+                "NORMAL",
+                "FLEXIBLE_VIBRATION",
+                "EXTERNAL_CONTACT",
+                "LOW_CONFIDENCE"
+            ],
+            "description": "跨语言统一的分类状态"
         },
         "operation_mode": {
             "type": "string",
-            "enum": ["normal", "vibration_suppression", "safe_slowdown", "degraded"],
-            "description": "Current operation mode"
+            "enum": [
+                "NORMAL_TRACKING",
+                "VIBRATION_SUPPRESSION",
+                "SAFE_SLOWDOWN",
+                "LOW_CONFIDENCE_DEGRADED"
+            ],
+            "description": "跨语言统一的运行模式"
         },
         "valid_flag": {
             "type": "boolean",
-            "description": "Whether the state data is valid"
+            "description": "当前状态是否可供下游模块使用"
         },
         "reason_codes": {
             "type": "array",
             "items": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                    "NONE",
+                    "INVALID_TIMESTAMP",
+                    "INVALID_ENCODER",
+                    "INVALID_CURRENT",
+                    "TORQUE_SATURATED",
+                    "LOW_CONFIDENCE"
+                ]
             },
-            "description": "Traceable reasons for a valid or degraded estimate"
+            "uniqueItems": true,
+            "description": "估计有效或降级的可追溯原因"
         }
     },
     "required": [
@@ -69,6 +93,7 @@
         "innovation_norm",
         "confidence_score",
         "contact_score",
+        "classification_state",
         "operation_mode",
         "valid_flag",
         "reason_codes"

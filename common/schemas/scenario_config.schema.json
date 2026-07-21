@@ -1,61 +1,62 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/scenario_config.schema.json",
-    "title": "ScenarioConfig",
-    "description": "Configuration schema for simulation scenarios in FlexSense-Guard",
+    "title": "场景配置",
+    "description": "FlexSense-Guard 仿真场景的公共配置",
     "type": "object",
     "properties": {
         "schema_version": {
             "type": "string",
-            "description": "Schema version (semver)",
+            "description": "符合语义化版本格式的 Schema 版本",
             "pattern": "^\\d+\\.\\d+\\.\\d+$"
         },
         "scenario_id": {
             "type": "string",
-            "description": "Unique scenario identifier"
+            "description": "场景唯一标识"
         },
         "payload_level": {
             "type": "string",
             "enum": ["light", "medium", "heavy"],
-            "description": "Payload level"
+            "description": "负载等级"
         },
         "sample_time_s": {
             "type": "number",
             "exclusiveMinimum": 0,
-            "description": "Simulation sampling time [s]"
+            "description": "仿真采样时间，单位为秒"
         },
         "duration_s": {
             "type": "number",
             "exclusiveMinimum": 0,
-            "description": "Total simulation duration [s]"
+            "description": "仿真总时长，单位为秒"
         },
         "collision_time_s": {
             "type": "number",
             "minimum": -1,
-            "description": "External contact injection time [s]; -1 means no contact"
+            "description": "外部接触注入时刻，单位为秒；-1 表示不注入"
         },
         "encoder_dropout_rate": {
             "type": "number",
             "minimum": 0,
             "maximum": 1,
-            "description": "Encoder dropout probability [0, 1]"
+            "description": "编码器丢包比例"
         },
         "current_noise_std": {
             "type": "number",
             "minimum": 0,
-            "description": "Current measurement noise standard deviation [A]"
+            "description": "电流测量噪声标准差，单位为安培"
         },
         "torque_constant_error": {
             "type": "number",
-            "description": "Torque constant deviation ratio (e.g., 0.1 = 10% error)"
+            "description": "力矩常数偏差比例，例如 0.1 表示 10% 偏差"
         },
         "observer_parameter_mismatch": {
             "type": "number",
-            "description": "Observer parameter mismatch ratio (e.g., 0.2 = 20% mismatch)"
+            "description": "Observer 参数失配比例，例如 0.2 表示 20% 失配"
         },
         "random_seed": {
             "type": "integer",
-            "description": "Random seed for reproducibility; 0 means not fixed"
+            "minimum": 0,
+            "description": "用于复现的固定非负随机种子，包含种子 0"
         }
     },
     "required": [
