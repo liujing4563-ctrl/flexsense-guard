@@ -1,4 +1,6 @@
-# System Architecture
+# 历史系统架构
+
+> 本文件仅用于历史追溯。当前架构以 [`docs/02_architecture/system_architecture.md`](../docs/02_architecture/system_architecture.md) 为准。
 
 ## 系统架构图
 

@@ -29,7 +29,6 @@ env/
 
 # === MATLAB ===
 *.mat
-*.slx
 *.slxc
 *.mdl
 *.mdlp

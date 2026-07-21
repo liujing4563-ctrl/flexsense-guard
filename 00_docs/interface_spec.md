@@ -1,4 +1,6 @@
-# Interface Specification
+# 历史接口规范
+
+> 本文件仅用于历史追溯。当前规范以 [`docs/02_architecture/interface_spec.md`](../docs/02_architecture/interface_spec.md) 为准。
 
 ## 概述
 
@@ -6,7 +8,7 @@
 
 ---
 
-## 1. 场景配置 (ScenarioConfig)
+## 1. 场景配置 `ScenarioConfig`
 
 文件：`common/schemas/scenario_config.schema.json`
 
@@ -26,7 +28,7 @@
 
 ---
 
-## 2. 系统状态 (SystemState)
+## 2. 系统状态 `SystemState`
 
 文件：`common/schemas/system_state.schema.json`
 
@@ -45,7 +47,7 @@
 
 ---
 
-## 3. 验证报告 (ValidationReport)
+## 3. 验证报告 `ValidationReport`
 
 文件：`common/schemas/validation_report.schema.json`
 

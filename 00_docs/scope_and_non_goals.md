@@ -1,4 +1,6 @@
-# Scope and Non-Goals
+# 历史项目范围与非目标
+
+> 本文件仅用于历史追溯。当前范围以 [`docs/01_project/scope_and_non_goals.md`](../docs/01_project/scope_and_non_goals.md) 为准。
 
 ## 项目范围
 
@@ -49,7 +51,7 @@
    - 一键演示脚本
    - 自动报告生成
 
-### 明确排除（Non-Goals）
+### 明确排除
 
 1. **不使用负载侧传感器** — 负载侧位置、速度、力矩仅作为评价真值，不作为观测器输入
 2. **不实现 Kuramoto 同步** — 不涉及多关节同步或多机器人协同
