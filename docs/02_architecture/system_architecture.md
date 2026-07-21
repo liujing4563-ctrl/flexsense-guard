@@ -100,6 +100,14 @@ motor_torque_measured_nm
 Observer 禁止直接使用未经执行器模型处理的 `torque_command_nm`。Plant 和
 Observer 每个采样点使用的实际施加力矩与测量力矩必须可追溯并进入评价记录。
 
+### 当前实现状态
+
+上述模型和输入语义已经在文档层冻结，但 MATLAB Plant、EKF、雅可比和 runner
+尚未迁移。当前代码不能作为该架构已实现的证据，P1 也不能据此更新为 `PASS`。
+具体修改由 Simulink 同学依据
+[`p1_model_input_handoff.md`](../04_collaboration/p1_model_input_handoff.md) 在独立
+分支完成，项目负责人只审查模型、接口、实验公平性和阶段决定。
+
 ## 数据分层
 
 ### 运行时数据
