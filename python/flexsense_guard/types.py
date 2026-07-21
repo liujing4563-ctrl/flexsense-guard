@@ -48,8 +48,9 @@ class MotorSideMeasurement:
     motor_position_rad: float
     motor_velocity_rad_s: float
     motor_current_a: float
-    motor_torque_nm: float
     torque_command_nm: float
+    motor_torque_applied_nm: float
+    motor_torque_measured_nm: float
     encoder_valid: bool
     current_valid: bool
     timestamp_valid: bool

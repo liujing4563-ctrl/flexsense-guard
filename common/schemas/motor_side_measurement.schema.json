@@ -1,0 +1,68 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/motor_side_measurement.schema.json",
+    "title": "电机侧测量",
+    "description": "Plant、执行器模型、信号健康检测和 Observer 之间的运行时输入契约",
+    "type": "object",
+    "properties": {
+        "timestamp_s": {
+            "type": "number",
+            "minimum": 0,
+            "description": "当前样本时间，单位为秒"
+        },
+        "motor_position_rad": {
+            "type": "number",
+            "description": "电机侧角位置，单位为弧度"
+        },
+        "motor_velocity_rad_s": {
+            "type": "number",
+            "description": "电机侧角速度，单位为弧度每秒"
+        },
+        "motor_current_a": {
+            "type": "number",
+            "description": "电机电流测量，单位为安培"
+        },
+        "torque_command_nm": {
+            "type": "number",
+            "description": "执行器模型之前的电机侧力矩指令，单位为牛米"
+        },
+        "motor_torque_applied_nm": {
+            "type": "number",
+            "description": "执行器约束后实际施加到 Plant 的电机侧力矩，单位为牛米"
+        },
+        "motor_torque_measured_nm": {
+            "type": "number",
+            "description": "Observer 可使用的电机侧测量力矩，单位为牛米"
+        },
+        "encoder_valid": {
+            "type": "boolean",
+            "description": "编码器测量是否有效"
+        },
+        "current_valid": {
+            "type": "boolean",
+            "description": "电流或测量力矩是否有效"
+        },
+        "timestamp_valid": {
+            "type": "boolean",
+            "description": "时间戳是否有效且顺序正确"
+        },
+        "saturation_flag": {
+            "type": "boolean",
+            "description": "当前样本是否发生执行器饱和"
+        }
+    },
+    "required": [
+        "timestamp_s",
+        "motor_position_rad",
+        "motor_velocity_rad_s",
+        "motor_current_a",
+        "torque_command_nm",
+        "motor_torque_applied_nm",
+        "motor_torque_measured_nm",
+        "encoder_valid",
+        "current_valid",
+        "timestamp_valid",
+        "saturation_flag"
+    ],
+    "additionalProperties": false
+}

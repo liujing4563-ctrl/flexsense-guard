@@ -1,0 +1,25 @@
+{
+    "fixture_type": "MOCK",
+    "schema_path": "common/schemas/validation_report.schema.json",
+    "purpose": "仅用于报告字段联调，不是 P1、P2 或 P3 实验结果",
+    "payload": {
+        "schema_version": "1.0.0",
+        "algorithm_version": "MOCK-NOT-AN-ALGORITHM",
+        "git_commit": "MOCK-NOT-A-COMMIT",
+        "random_seed": 0,
+        "decision": "NOT_VERIFIED",
+        "evidence_validity": "INSUFFICIENT",
+        "load_position_rmse_rad": 0.0,
+        "load_velocity_rmse_rad_s": 0.0,
+        "external_torque_rmse_nm": 0.0,
+        "false_alarm_count": 0,
+        "missed_detection_count": 0,
+        "detection_delay_s": 0.0,
+        "stopping_time_s": 0.0,
+        "post_contact_travel_rad": 0.0,
+        "vibration_velocity_rms_rad_s": 0.0,
+        "energy_proxy_j": 0.0,
+        "runtime_ms": 0.0,
+        "valid_flag": false
+    }
+}
