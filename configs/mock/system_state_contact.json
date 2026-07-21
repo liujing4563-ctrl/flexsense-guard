@@ -1,0 +1,19 @@
+{
+    "fixture_type": "MOCK",
+    "schema_path": "common/schemas/system_state.schema.json",
+    "purpose": "仅用于 App 接触状态接口联调，不是实验结果，也不表示 P2 已通过",
+    "payload": {
+        "timestamp_s": 1.2,
+        "estimated_load_position_rad": 0.08,
+        "estimated_load_velocity_rad_s": 0.12,
+        "estimated_torsion_rad": 0.015,
+        "estimated_external_torque_nm": 2.4,
+        "innovation_norm": 1.8,
+        "confidence_score": 0.82,
+        "contact_score": 0.91,
+        "classification_state": "EXTERNAL_CONTACT",
+        "operation_mode": "SAFE_SLOWDOWN",
+        "valid_flag": true,
+        "reason_codes": ["NONE"]
+    }
+}

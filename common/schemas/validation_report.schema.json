@@ -1,90 +1,96 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://github.com/liujing4563-ctrl/flexsense-guard/schemas/validation_report.schema.json",
-    "title": "ValidationReport",
-    "description": "Validation report schema for FlexSense-Guard simulation runs",
+    "title": "验证报告",
+    "description": "FlexSense-Guard 单次仿真运行的机器可读验证汇总",
     "type": "object",
     "properties": {
         "schema_version": {
             "type": "string",
-            "description": "Schema version (semver)",
+            "description": "符合语义化版本格式的 Schema 版本",
             "pattern": "^\\d+\\.\\d+\\.\\d+$"
         },
         "algorithm_version": {
             "type": "string",
-            "description": "Algorithm version identifier"
+            "description": "算法版本标识"
         },
         "git_commit": {
             "type": "string",
-            "description": "Git commit hash of this run"
+            "description": "本次运行对应的 Git 提交标识"
         },
         "random_seed": {
             "type": "integer",
-            "description": "Random seed used"
+            "minimum": 0,
+            "description": "本次运行使用的非负随机种子"
         },
         "decision": {
             "type": "string",
-            "enum": ["pass", "fail", "inconclusive"],
-            "description": "Overall validation decision"
+            "enum": ["PASS", "FAIL", "NOT_VERIFIED"],
+            "description": "阶段或案例验证结论"
         },
-        "load_position_rmse": {
+        "evidence_validity": {
+            "type": "string",
+            "enum": ["VALID", "INVALID", "INSUFFICIENT"],
+            "description": "本报告证据的有效性"
+        },
+        "load_position_rmse_rad": {
             "type": "number",
             "minimum": 0,
-            "description": "Load position RMSE [rad]"
+            "description": "负载侧位置估计 RMSE，单位为弧度"
         },
-        "load_velocity_rmse": {
+        "load_velocity_rmse_rad_s": {
             "type": "number",
             "minimum": 0,
-            "description": "Load velocity RMSE [rad/s]"
+            "description": "负载侧速度估计 RMSE，单位为弧度每秒"
         },
-        "external_torque_rmse": {
+        "external_torque_rmse_nm": {
             "type": "number",
             "minimum": 0,
-            "description": "External torque estimation RMSE [Nm]"
+            "description": "外部关节扰动力矩估计 RMSE，单位为牛米"
         },
         "false_alarm_count": {
             "type": "integer",
             "minimum": 0,
-            "description": "Number of false alarms (normal classified as contact)"
+            "description": "正常或振动窗口被判为接触的事件数"
         },
         "missed_detection_count": {
             "type": "integer",
             "minimum": 0,
-            "description": "Number of missed detections (contact not detected)"
+            "description": "未在冻结检测窗口内检出的接触事件数"
         },
         "detection_delay_s": {
             "type": "number",
             "minimum": 0,
-            "description": "Detection delay from contact onset [s]"
+            "description": "接触开始到首次有效检出的时间，单位为秒"
         },
         "stopping_time_s": {
             "type": "number",
             "minimum": 0,
-            "description": "Time from detection to full stop [s]"
+            "description": "有效检出到满足停止判据的时间，单位为秒"
         },
         "post_contact_travel_rad": {
             "type": "number",
             "minimum": 0,
-            "description": "Angular travel after contact detection [rad]"
+            "description": "有效检出后的负载侧角位移绝对值，单位为弧度"
         },
-        "vibration_rms": {
+        "vibration_velocity_rms_rad_s": {
             "type": "number",
             "minimum": 0,
-            "description": "Vibration velocity RMS [rad/s]"
+            "description": "指定窗口内负载侧振动速度 RMS，单位为弧度每秒"
         },
-        "energy_proxy": {
+        "energy_proxy_j": {
             "type": "number",
             "minimum": 0,
-            "description": "Energy proxy (torque squared integral)"
+            "description": "机械功率绝对值积分形成的仿真能量代理，单位为焦耳"
         },
         "runtime_ms": {
             "type": "number",
             "minimum": 0,
-            "description": "Per-step algorithm execution time [ms]"
+            "description": "单步算法执行时间，单位为毫秒"
         },
         "valid_flag": {
             "type": "boolean",
-            "description": "Whether the report is valid"
+            "description": "该汇总结构和必需证据是否有效"
         }
     },
     "required": [
@@ -93,9 +99,10 @@
         "git_commit",
         "random_seed",
         "decision",
-        "load_position_rmse",
-        "load_velocity_rmse",
-        "external_torque_rmse",
+        "evidence_validity",
+        "load_position_rmse_rad",
+        "load_velocity_rmse_rad_s",
+        "external_torque_rmse_nm",
         "false_alarm_count",
         "missed_detection_count",
         "valid_flag"

@@ -12,7 +12,102 @@
 每项主体实现必须由对应负责同学解释设计、复现实验并参与 PR 审查。任何同学均
 不得以复制代码、代跑命令或只制作图表代替模块责任。
 
-## 项目负责人同学
+## 目录与文件责任矩阵
+
+本节是仓库路径归属的唯一规范来源。后文的职责描述解释“做什么”，本节明确
+“在哪些路径做”。一个路径只有一位主责同学；协作、审查或提供输入不改变主责
+归属。
+
+### 归属含义
+
+- **主责**：对该路径中的源码、测试、运行结果、README、已知风险和交付质量负责；
+- **协作**：可以在 Issue 明确范围后参与修改，但 PR 必须由主责同学确认；
+- **公共契约**：由项目负责人同学维护语义，所有受影响模块同学必须审查；
+- **历史归档**：只用于追溯，不作为当前规范或新实现入口；
+- **规划骨架**：只包含责任 README 或目录结构，不能据此声称模块已经开始或完成。
+
+### 现有路径
+
+| 主责同学 | 主责目录或文件 | 责任边界 |
+|---|---|---|
+| 项目负责人同学 | `docs/01_project/**` | 章程、范围、风险和路线 |
+| 项目负责人同学 | `docs/02_architecture/**` | 系统架构、数学模型和公共接口语义 |
+| 项目负责人同学 | `docs/03_validation/**` | P1/P2/P3 门禁、实验协议和正式结果状态 |
+| 项目负责人同学 | `docs/04_collaboration/**`、`docs/README.md`、`docs/current_status_and_next_steps.md` | 职责、任务、Git 流程、文档索引和当前状态 |
+| 项目负责人同学 | `docs/decision_log.md` | 跨类别重大决策、证据和反转条件 |
+| 项目负责人同学 | `README.md`、`CONTRIBUTING.md`、`AGENTS.md`、`LICENSE_NOTICE.md` | 仓库入口、协作规则、Codex 规则和许可边界 |
+| 项目负责人同学 | `.github/**` | Issue、PR、CI 和仓库治理模板；模块同学协作维护本模块检查 |
+| 项目负责人同学 | `common/schemas/**` | 公共 Schema 语义；受影响模块同学必须共同审查 |
+| 项目负责人同学 | `python/flexsense_guard/**`、`python/tests/**`、`pyproject.toml`、`requirements-dev.txt` | 公共 Python 契约包、契约测试和基础安装，不放主体算法 |
+| 项目负责人同学 | `03_confidence_trigger/**` | 可信评分、信号健康、事件触发、更新门控和回退规则 |
+| 项目负责人同学 | `05_control/**` | 模式管理、控制切换和安全降级逻辑 |
+| 项目负责人同学 | `06_validation/metrics/**` | 公共评价指标实现；实验数据仍由产生数据的模块同学负责 |
+| 项目负责人同学 | `results/README.md`、`results/p3/**`、`results/integration/**` | 证据规则入口、P3 与集成阶段决定；原始证据仍由产生数据的同学确认 |
+| 项目负责人同学 | `scripts/setup_project.m` | 跨模块 MATLAB 路径和集成入口，不包含 P1 算法逻辑 |
+| Simulink 同学 | `01_plant/**` | Plant、参数、MATLAB/Simulink、模块测试和说明 |
+| Simulink 同学 | `02_observer/**` | Observer、baseline、参数、模块测试和说明 |
+| Simulink 同学 | `scripts/run_p1_feasibility_probe.m`、`scripts/run_probe.m` | P1 runner 和 MATLAB 探针执行；阶段结论仍由项目负责人审查 |
+| Simulink 同学 | `results/p1/**` | P1 原始证据索引和机器可读汇总；阶段决定由项目负责人审查 |
+| 深度学习通感算同学 | `04_classification/**` | 特征、规则分类、后续轻量模型、模块测试和数据说明 |
+| 深度学习通感算同学 | `09_test_agent/**` | 测试 Agent 工具、工作流和报告草稿；不得绕过阶段门 |
+| 深度学习通感算同学 | `06_validation/fault_injection/**`、`06_validation/monte_carlo/**`、`results/p2/**` | 故障注入、批量实验工具和 P2 证据；主体实现受 P1 门禁约束 |
+| 计算机软件同学 | `configs/**`、`06_validation/reports/**`、`07_app/**`、`results/reports/**` | 版本化配置、报告工具、App 和报告产物；Mock 由项目负责人先建立后交接 |
+| 嵌入式 Linux 同学 | `08_sil/**` | C/C++、CMake、CTest、基准和 SIL；主体实现受前置门禁约束 |
+
+`00_docs/**` 是早期文档归档，由项目负责人同学负责保管。除补充“已废弃”、
+迁移链接或纠正会误导追溯的事实外，不在该目录继续维护当前规范。
+
+### 已规划但主体待启动的路径
+
+以下路径的 README 骨架已由项目负责人建立，用于明确归属、输入、输出和门禁。
+目录存在不代表主体实现已经开始，更不代表功能已完成。对应同学只能在前置阶段门
+满足、Issue 明确验收标准后添加实现或正式结果。
+
+| 主责同学 | 已规划目录 | 启动条件与用途 |
+|---|---|---|
+| 深度学习通感算同学 | `04_classification/datasets/**` | P1 形成有效 `PASS` 证据后，保存数据说明、版本和划分索引；不提交大规模生成数据 |
+| 深度学习通感算同学 | `06_validation/fault_injection/**`、`06_validation/monte_carlo/**` | P1 通过且故障范围冻结后，维护故障注入和批量实验工具 |
+| 计算机软件同学 | `configs/**` | 公共配置格式冻结后，维护版本化运行配置；算法参数须由对应模块同学确认 |
+| 计算机软件同学 | `06_validation/reports/**` | 有真实运行结果后，维护结果索引和自动报告，不修改指标语义 |
+| 计算机软件同学 | `07_app/**` | P1 形成有效 `PASS` 证据后，开发 App、看板、状态管理和演示 |
+| 嵌入式 Linux 同学 | `08_sil/**` | 主算法和公共接口冻结后，开发 C/C++、CMake、CTest 和 SIL |
+| 各阶段负责同学 | `results/p1/**`、`results/p2/**`、`results/p3/**` | 对应阶段获准运行后保存证据索引和汇总，具体归属见现有路径表 |
+| 项目负责人同学 | `results/integration/**` | 前置阶段通过后保存跨模块集成验收索引 |
+| 计算机软件同学 | `results/reports/**` | 有真实证据后保存可审查报告产物 |
+
+### 跨路径修改规则
+
+1. 修改主责路径之外的文件，Issue 和 PR 必须写明协作原因，并请求主责同学确认。
+2. 公共字段变更必须同步 `docs/02_architecture/**`、`common/schemas/**`、
+   `python/flexsense_guard/**` 和受影响语言定义，不能由单个模块自行决定。
+3. 模块目录内的 README、测试和参数文件与该模块源码归同一位主责同学。
+4. `scripts/` 不整体归某一位同学，必须按上表的具体文件判断。
+5. 未列出的新路径先由项目负责人同学完成归属判定，不代表项目负责人自动接管实现。
+6. 新建、移动或重命名主责路径时，必须在同一 PR 中更新本矩阵。
+7. CODEOWNERS 只能在收集全部同学的 GitHub 账号后建立，不使用虚构账号占位。
+
+## 工作包一：项目负责人同学
+
+### 负责目录
+
+- 项目与协作文档：`docs/01_project/**`、`docs/02_architecture/**`、
+  `docs/03_validation/**`、`docs/04_collaboration/**`、`docs/README.md`、
+  `docs/current_status_and_next_steps.md`、`docs/decision_log.md`；
+- 仓库治理：`.github/**`、`README.md`、`CONTRIBUTING.md`、`AGENTS.md`、
+  `LICENSE_NOTICE.md`；
+- 公共契约：`common/schemas/**`、`python/flexsense_guard/**`、
+  `python/tests/**`、`pyproject.toml`、`requirements-dev.txt`；
+- 可信与控制：`03_confidence_trigger/**`、`05_control/**`；
+- 公共评价、P3 与集成：`06_validation/metrics/**`、`results/README.md`、
+  `results/p3/**`、`results/integration/**`、`scripts/setup_project.m`；
+- 历史文档保管：`00_docs/**`，只维护追溯说明，不作为当前规范入口。
+
+### 协作但不主责目录
+
+- 与 Simulink 同学共同审查 `01_plant/**`、`02_observer/**` 和 P1 runner，
+  但不承担主体实现；
+- 审查 `04_classification/**`、`09_test_agent/**`、计划中的 `07_app/**` 和
+  `08_sil/**` 是否符合公共接口与阶段门。
 
 ### 核心职责
 
@@ -69,7 +164,22 @@
 - 不在证据不足时宣布阶段通过；
 - 不把个人提示词产生的全部代码记为个人模块成果。
 
-## Simulink 同学
+## 工作包二：Simulink 同学
+
+### 负责目录
+
+- Plant：`01_plant/**`；
+- Observer 与 baseline：`02_observer/**`；
+- MATLAB P1 执行入口：`scripts/run_p1_feasibility_probe.m`、
+  `scripts/run_probe.m`；
+- P1 证据：`results/p1/**`；后续 MATLAB/Simulink 结果由其产生并负责原始证据，
+  阶段决定仍需项目负责人审查。
+
+### 协作但不主责目录
+
+- 与项目负责人同学共同确认 `docs/02_architecture/**` 和
+  `docs/03_validation/**`，不单方面修改冻结模型或门禁；
+- 公共字段变更协作修改 `common/schemas/**`，语义仍由项目负责人同学主责。
 
 ### 核心职责
 
@@ -125,7 +235,22 @@
 - 不自行降低 P1 门限；
 - 不把未运行的 Simulink 或 MATLAB 检查写成通过。
 
-## 深度学习通感算同学
+## 工作包三：深度学习通感算同学
+
+### 负责目录
+
+- 分类特征、规则和后续轻量模型：`04_classification/**`；
+- 测试 Agent：`09_test_agent/**`；
+- 数据索引：`04_classification/datasets/**`；
+- 验证工具与 P2 证据：`06_validation/fault_injection/**`、
+  `06_validation/monte_carlo/**`、`results/p2/**`。
+
+相关 README 骨架已经建立，但主体工作均受 P1 阶段门约束，不能写成已开始或完成。
+
+### 协作但不主责目录
+
+- 审查 `common/schemas/**` 中的分类、证据和报告字段；
+- 使用 `06_validation/metrics/**` 的公共指标，但不自行改变指标语义或阶段门。
 
 ### 核心职责
 
@@ -179,7 +304,27 @@
 - 不把规则分数称为概率；
 - 不负责 App 或 C/SIL 主体实现。
 
-## 计算机软件同学
+## 工作包四：计算机软件同学
+
+### 负责目录
+
+以下目录骨架已经建立并完成责任交接，但尚无主体实现：
+
+- 版本化运行配置：`configs/**`；
+- 自动报告：`06_validation/reports/**`；
+- App、看板、状态管理和演示：`07_app/**`；
+- 可审查报告产物：`results/reports/**`。
+
+添加主体实现或正式结果前必须满足对应阶段门，并在 Issue 中说明输入、输出和验收
+标准。项目负责人建立的 `configs/mock/**` 只用于接口联调，交由软件同学消费和维护。
+
+### 协作但不主责目录
+
+- 审查 `common/schemas/scenario_config.schema.json`、
+  `common/schemas/system_state.schema.json` 和
+  `common/schemas/validation_report.schema.json` 的可用性；
+- 不直接修改 `01_plant/**`、`02_observer/**`、`04_classification/**` 或
+  `08_sil/**` 的主体实现。
 
 ### 核心职责
 
@@ -228,7 +373,21 @@
 - 不用界面效果替代算法证据；
 - 不绕过阶段门提前声称完整功能。
 
-## 嵌入式 Linux 同学
+## 工作包五：嵌入式 Linux 同学
+
+### 负责目录
+
+`08_sil/**` 的 README 骨架已经建立。主算法和接口冻结后，由该同学添加主体实现并
+主责：
+
+- C/C++、头文件、CMake、CTest、基准和 SIL：`08_sil/**`。
+
+### 协作但不主责目录
+
+- 审查 `common/schemas/**`、`python/flexsense_guard/**` 和 MATLAB 参考接口的
+  类型、单位、范围与异常处理要求；
+- 使用 Simulink 同学交付的 `01_plant/**`、`02_observer/**` 参考和测试向量，
+  不在 `08_sil/**` 中自行改变模型语义。
 
 ### 核心职责
 

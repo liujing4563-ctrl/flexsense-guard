@@ -1,0 +1,19 @@
+{
+    "fixture_type": "MOCK",
+    "schema_path": "common/schemas/system_state.schema.json",
+    "purpose": "仅用于 App 正常状态接口联调，不是实验结果",
+    "payload": {
+        "timestamp_s": 0.5,
+        "estimated_load_position_rad": 0.01,
+        "estimated_load_velocity_rad_s": 0.02,
+        "estimated_torsion_rad": 0.001,
+        "estimated_external_torque_nm": 0.0,
+        "innovation_norm": 0.1,
+        "confidence_score": 0.95,
+        "contact_score": 0.05,
+        "classification_state": "NORMAL",
+        "operation_mode": "NORMAL_TRACKING",
+        "valid_flag": true,
+        "reason_codes": ["NONE"]
+    }
+}

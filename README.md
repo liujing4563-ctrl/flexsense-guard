@@ -61,8 +61,8 @@ Mode Manager 或 Control。
 - 必须区分 `torque_command_nm`、`motor_torque_applied_nm` 和
   `motor_torque_measured_nm`；
 - Plant 使用实际施加力矩，Observer 使用测量力矩，禁止直接使用原始力矩指令；
-- 旧 Python、MATLAB 和 Schema 输入定义完成迁移前，公共输入契约为
-  `NOT FROZEN`。
+- 文档语义、JSON Schema 和 Python 输入类型已完成三类力矩迁移；MATLAB 信号
+  结构仍由 Simulink 同学迁移，端到端输入链路状态为 `NOT_VERIFIED`。
 
 ## 公共状态
 
@@ -97,16 +97,18 @@ Jacobian 或等效力臂时，不称为末端力。
 - C 路线：模型、输入和实验设计修复后，P1 仍基于有效证据失败，降级为 SafeTune-J 事件触发可信自整定与自动验收
   系统。
 
-## 本工作包范围
+## 项目负责人工作包范围
 
-当前 `chore/project-lead-foundation` 工作包只负责：
+项目负责人基础工作包负责：
 
 - 项目章程、范围和系统架构；
 - 公共接口和跨语言枚举；
 - P1/P2/P3 门禁、实验协议和风险；
 - 五位同学职责和交接规则；
 - Git、PR、Issue 和 Codex 使用边界；
-- Python 包安装、公共类型、Schema 和基础 CI。
+- 术语、跨语言契约、验收矩阵、指标、证据和决策日志；
+- Python 包安装、公共类型、Schema、Mock 样例和基础 CI；
+- 缺失模块目录骨架及路径责任规划。
 
 本工作包不修改双惯量 Plant、MATLAB EKF、Simulink `.slx`、分类算法、可信评分
 主体、App、C/SIL 或测试 Agent。
@@ -147,7 +149,11 @@ FlexSense-Guard/
 ├── 04_classification/       # 特征和分类
 ├── 05_control/              # 模式管理和控制
 ├── 06_validation/           # 指标与验证
-├── 09_test_agent/           # 测试 Agent 占位
+├── 07_app/                  # 软件同学工作包骨架
+├── 08_sil/                  # 嵌入式 Linux 同学工作包骨架
+├── 09_test_agent/           # 测试 Agent 工作包
+├── configs/                 # 配置与 MOCK 接口样例
+├── results/                 # 阶段证据索引与报告
 ├── common/schemas/          # JSON Schema
 ├── python/                  # Python 公共契约与基础测试
 ├── scripts/                 # 运行入口
@@ -177,12 +183,21 @@ FlexSense-Guard/
 - [风险登记册](docs/01_project/risk_register.md)
 - [系统架构](docs/02_architecture/system_architecture.md)
 - [公共接口规范](docs/02_architecture/interface_spec.md)
+- [术语与符号表](docs/02_architecture/glossary_and_symbols.md)
+- [跨语言契约矩阵](docs/02_architecture/cross_language_contract.md)
+- [可信评分设计规范](docs/02_architecture/confidence_design_spec.md)
+- [事件触发校准规范](docs/02_architecture/event_trigger_calibration_spec.md)
+- [模式管理规范](docs/02_architecture/mode_manager_spec.md)
 - [72 小时技术探针](docs/03_validation/feasibility_probe_72h.md)
 - [实验协议](docs/03_validation/experiment_protocol.md)
+- [阶段验收矩阵](docs/03_validation/acceptance_matrix.md)
+- [指标定义](docs/03_validation/metric_definitions.md)
+- [证据管理规范](docs/03_validation/evidence_management.md)
 - [技术探针执行记录](docs/03_validation/probe_results.md)
 - [同学职责与交接规则](docs/04_collaboration/team_responsibilities.md)
 - [阶段任务清单](docs/04_collaboration/issue_backlog.md)
 - [Git 协作流程](docs/04_collaboration/git_workflow.md)
+- [决策日志](docs/decision_log.md)
 
 ## 不作出的声明
 

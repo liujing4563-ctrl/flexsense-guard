@@ -15,6 +15,7 @@
 
 ## 公共接口检查
 
+- [ ] 没有修改 Issue 允许范围之外或非本模块的主体代码
 - [ ] 文档、Schema 和语言类型已同步
 - [ ] 未引入 `contact_probability`
 - [ ] 外扰输出统一为 `estimated_external_torque_nm`
@@ -32,6 +33,9 @@
 - 配置、随机种子和结果位置：
 - 失败记录是否完整保留：
 
+- [ ] 没有降低阶段门或在评价集上调整参数
+- [ ] 没有删除、覆盖或静默排除失败案例
+
 ## 验证
 
 - [ ] `python -m pip install -e .`
@@ -39,6 +43,7 @@
 - [ ] MATLAB/Octave：`PASSED` / `FAILED` / `NOT RUN`
 - [ ] C/SIL：`PASSED` / `FAILED` / `NOT RUN`
 - [ ] App：`PASSED` / `FAILED` / `NOT RUN`
+- [ ] 所有勾选为通过的命令均已真实运行，未运行项明确标记 `NOT RUN`
 
 实际执行命令与结果：
 
