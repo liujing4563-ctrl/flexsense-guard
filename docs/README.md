@@ -2,6 +2,9 @@
 
 本目录是 FlexSense-Guard 的规范来源。`00_docs/` 仅保留历史追溯价值。
 
+文档标记为 `FROZEN` 或 `SPECIFIED` 只表示规则已经规定，不表示主体算法、跨语言
+映射或性能已经实现。实际落地状态以跨语言契约矩阵、当前状态和阶段证据为准。
+
 ## 快速入口
 
 - [`current_status_and_next_steps.md`](current_status_and_next_steps.md)：当前完成情况、下一动作和每位同学的立即任务

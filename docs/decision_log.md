@@ -25,7 +25,7 @@ Reversal condition:
 - **Decision**：历史执行结果保留 `FAIL`；证据有效性为
   `INVALID / INSUFFICIENT`；当前 P1 可行性结论改为 `NOT_VERIFIED`。
 - **Evidence**：旧实验存在力矩侧未冻结、Plant/Observer 输入不一致、单负载、
-  单场景、单 seed 和调参与评价未隔离问题。
+  单场景、单 seed 和调参与评价未隔离问题；当前环境也无法执行 MATLAB 复验。
 - **Owner**：项目负责人同学。
 - **Affected files**：项目、架构、验证和当前状态文档。
 - **Reversal condition**：模型和输入契约修复后，新的有效、充分且可复现实验形成
@@ -56,6 +56,14 @@ Reversal condition:
 - **Reversal condition**：无；只能通过版本化接口变更进一步细化，不能重新合并为
   含糊字段。
 
+```text
+Historical P1 execution result: FAIL
+Evidence validity: INVALID / INSUFFICIENT
+Current P1 feasibility decision: NOT_VERIFIED
+P2: BLOCKED
+P3: BLOCKED
+```
+
 ## DEC-004：按模块路径归属 Codex 产出
 
 - **Date**：2026-07-21
@@ -65,3 +73,17 @@ Reversal condition:
 - **Owner**：项目负责人同学。
 - **Affected files**：职责、Issue、PR 和贡献规范。
 - **Reversal condition**：团队正式调整人员或目录归属并更新责任矩阵。
+
+## DEC-005：设计规范与算法实现分层
+
+- **Date**：2026-07-21
+- **Problem**：完整设计文档是否可以被解释为 Confidence、Calibration、Mode
+  Manager 或验证系统已经实现。
+- **Decision**：规范可以标记为 `SPECIFIED`，但主体算法、跨语言映射和性能结论
+  必须分别记录。权重、阈值、窗口和保持时间在有效证据形成前保持 TBD。
+- **Evidence**：当前仓库只有文档、Schema、Python 契约、Mock 和部分旧实现，尚无
+  经过 P1/P2/P3 验证的端到端链路。
+- **Owner**：项目负责人同学维护规范；对应模块同学负责实现和实验。
+- **Affected files**：架构规范、跨语言矩阵、验收矩阵、当前状态和 PR 声明。
+- **Reversal condition**：对应实现完成、测试实际运行并通过冻结阶段门后，单独更新
+  实现状态和性能结论。
