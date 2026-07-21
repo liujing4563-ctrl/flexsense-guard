@@ -1,24 +1,45 @@
 # 跨语言契约矩阵
 
-## 目的
+## 目的与状态定义
 
-本矩阵用于跟踪公共字段在文档、JSON、Python、MATLAB、C/C++ 和 App 中的落地
-状态。语义冻结不等于所有语言已经迁移，只有各实现完成一致性测试后，端到端
-契约才可标记为已验证。
+本矩阵逐字段记录文档、Python、JSON Schema、MATLAB、C 和 App 的真实落地状态。
+字段语义冻结不代表算法已经实现，也不代表端到端链路已经验证。
 
-状态取值：`FROZEN`、`IMPLEMENTED`、`PENDING`、`BLOCKED`、`NOT_APPLICABLE`。
+状态只能使用：
 
-## 当前矩阵
+| 状态 | 含义 |
+|---|---|
+| `FROZEN` | 该层的字段名称、类型、单位和枚举已经对齐并受契约测试约束 |
+| `PARTIAL` | 已有部分定义或实现，但仍存在缺项、候选值或未验证映射 |
+| `NOT FROZEN` | 已有旧实现或草案，但尚未迁移到当前权威契约 |
+| `MISSING` | 当前仓库中不存在该层映射 |
+| `NOT APPLICABLE` | 该字段按架构不应出现在该层 |
 
-| 契约项 | 文档语义 | JSON Schema | Python | MATLAB/Simulink | C/C++ SIL | App | 当前结论 |
-|---|---|---|---|---|---|---|---|
-| 三类电机力矩字段 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 端到端 `NOT_VERIFIED` |
-| `VirtualSensingEstimate` 输出 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | Python/JSON 一致 |
-| 分类状态枚举 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 主体功能受 P2 阻断 |
-| 运行模式枚举 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 状态机规范已定义 |
-| 原因码 | `FROZEN` | `IMPLEMENTED` | `IMPLEMENTED` | `PENDING` | `BLOCKED` | `BLOCKED` | 新增值须走接口 PR |
-| 验证结论 | `FROZEN` | `IMPLEMENTED` | `NOT_APPLICABLE` | `PENDING` | `BLOCKED` | `BLOCKED` | 统一为 `PASS/FAIL/NOT_VERIFIED` |
-| 场景配置 | `FROZEN` | `IMPLEMENTED` | `PENDING` | `PENDING` | `NOT_APPLICABLE` | `BLOCKED` | 尚无端到端运行证据 |
+## 字段矩阵
+
+| 字段 | 含义 | 单位 | 文档 | Python | Schema | MATLAB | C | App | 当前状态 |
+|---|---|---:|---|---|---|---|---|---|---|
+| `timestamp_s` | 当前样本时间 | s | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `torque_command_nm` | 执行器模型前的电机侧力矩指令 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `motor_torque_applied_nm` | 执行器约束后实际施加到 Plant 的电机侧力矩 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `motor_torque_measured_nm` | Observer 可获得的电机侧测量或估计力矩 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `motor_position_rad` | 电机侧角位置测量 | rad | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `motor_velocity_rad_s` | 电机侧角速度测量 | rad/s | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `motor_current_a` | 电机电流测量 | A | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `estimated_load_position_rad` | 负载侧角位置估计 | rad | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `estimated_load_velocity_rad_s` | 负载侧角速度估计 | rad/s | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `estimated_torsion_rad` | `theta_m/N-theta_l` 的估计 | rad | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `estimated_external_torque_nm` | 负载侧外部关节扰动力矩估计 | N·m | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `innovation_norm` | Observer 创新残差范数 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `confidence_score` | 工程可信评分，不是概率 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `contact_score` | 接触证据评分，不是概率 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `classification_state` | 四值分类状态 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `operation_mode` | 四值运行模式 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `valid_flag` | 当前状态是否可供下游使用 | - | `FROZEN` | `FROZEN` | `FROZEN` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+| `reason_codes` | 无效、降级或回退原因数组 | - | `PARTIAL` | `PARTIAL` | `PARTIAL` | `NOT FROZEN` | `MISSING` | `MISSING` | `PARTIAL` |
+
+`reason_codes` 保持 `PARTIAL`，因为可信设计文档已经提出扩展候选原因码，而公共
+Schema 和 Python 当前仍只包含基础枚举。本 PR 不把候选原因码伪装成已实现接口。
 
 ## 权威来源
 
@@ -32,17 +53,11 @@
 | C/C++ 类型 | 由嵌入式 Linux 同学在 `08_sil/include/**` 中实现 |
 | App 映射 | 由计算机软件同学在 `07_app/**` 中实现 |
 
-## 兼容与迁移规则
+## 迁移规则
 
-1. 项目负责人先冻结语义、单位、枚举和失效行为。
-2. 公共 Schema 与 Python 参考类型在同一契约 PR 中迁移并通过自动测试。
-3. 模块负责同学在各自主责路径迁移语言类型，不得保留含糊的兼容别名。
-4. 旧数据如需读取，必须在模块边界做显式版本转换，不得污染新公共结构。
-5. 任何字段变更都要更新本矩阵、Mock 样例和受影响测试。
-6. 端到端状态只有在真实生产者和消费者共同回放通过后才能标记为 `FROZEN`。
-
-## 当前交接
-
-项目负责人已完成文档、JSON Schema 和 Python 公共契约层。Simulink 同学下一步
-负责 MATLAB 三类力矩字段、Plant 输出和 Observer 输入迁移；该工作完成并复验前，
-不得声称公共输入链路已完全冻结。
+1. 项目负责人冻结字段名称、单位、枚举、失效行为和版本规则。
+2. 模块负责同学在各自主责路径完成语言映射，不保留含糊兼容别名。
+3. 旧数据只能在模块边界显式转换，不能污染当前公共结构。
+4. 字段变更必须同步本矩阵、Mock、Schema、Python 类型和受影响测试。
+5. MATLAB、C 和 App 未共同回放前，跨语言契约整体保持 `PARTIAL`。
+6. 端到端通过只能由实际生产者、消费者和证据共同证明，不能由文档状态推断。
