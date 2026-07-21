@@ -35,7 +35,7 @@
 | 项目负责人同学 | `docs/03_validation/**` | P1/P2/P3 门禁、实验协议和正式结果状态 |
 | 项目负责人同学 | `docs/04_collaboration/**`、`docs/README.md`、`docs/current_status_and_next_steps.md` | 职责、任务、Git 流程、文档索引和当前状态 |
 | 项目负责人同学 | `docs/decision_log.md` | 跨类别重大决策、证据和反转条件 |
-| 项目负责人同学 | `README.md`、`CONTRIBUTING.md`、`AGENTS.md`、`LICENSE_NOTICE.md` | 仓库入口、协作规则、Codex 规则和许可边界 |
+| 项目负责人同学 | `README.md`、`CONTRIBUTING.md`、`AGENTS.md`、`LICENSE_NOTICE.md`、`.gitignore`、`.editorconfig`、`.gitattributes` | 仓库入口、协作规则、版本控制、编辑格式和许可边界 |
 | 项目负责人同学 | `.github/**` | Issue、PR、CI 和仓库治理模板；模块同学协作维护本模块检查 |
 | 项目负责人同学 | `common/schemas/**` | 公共 Schema 语义；受影响模块同学必须共同审查 |
 | 项目负责人同学 | `python/flexsense_guard/**`、`python/tests/**`、`pyproject.toml`、`requirements-dev.txt` | 公共 Python 契约包、契约测试和基础安装，不放主体算法 |
@@ -85,6 +85,9 @@
 5. 未列出的新路径先由项目负责人同学完成归属判定，不代表项目负责人自动接管实现。
 6. 新建、移动或重命名主责路径时，必须在同一 PR 中更新本矩阵。
 7. CODEOWNERS 只能在收集全部同学的 GitHub 账号后建立，不使用虚构账号占位。
+8. 项目负责人可以建立 `configs/mock/**` 初始样例、公共 Schema 和契约测试用于
+   接口治理；这不改变 `configs/**` 的软件同学主责，也不代表负责人接管 App。
+9. Codex 产出继续按实际所在路径和模块归属，不按提示词发起人归属。
 
 ## 工作包一：项目负责人同学
 
@@ -94,7 +97,7 @@
   `docs/03_validation/**`、`docs/04_collaboration/**`、`docs/README.md`、
   `docs/current_status_and_next_steps.md`、`docs/decision_log.md`；
 - 仓库治理：`.github/**`、`README.md`、`CONTRIBUTING.md`、`AGENTS.md`、
-  `LICENSE_NOTICE.md`；
+  `LICENSE_NOTICE.md`、`.gitignore`、`.editorconfig`、`.gitattributes`；
 - 公共契约：`common/schemas/**`、`python/flexsense_guard/**`、
   `python/tests/**`、`pyproject.toml`、`requirements-dev.txt`；
 - 可信与控制：`03_confidence_trigger/**`、`05_control/**`；
@@ -117,6 +120,7 @@
 - P1、P2、P3 门禁、实验公平性和降级决定；
 - 事件触发校准、可信门控及 `UPDATE`、`HOLD`、`ROLLBACK` 规则；
 - 模式管理、风险控制、系统集成、报告和答辩；
+- 为跨模块联调建立 Mock、Schema 和契约测试，不长期代替模块负责人完成主体实现；
 - PR 最终集成审查，不代替模块同学确认主体实现正确。
 
 ### 输入接口

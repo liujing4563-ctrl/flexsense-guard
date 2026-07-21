@@ -2,25 +2,27 @@
 
 ## 状态快照
 
-快照日期：2026-07-21。仓库基线分支为 `main`；本轮负责人工作包扩展仍在本地
-工作区，尚未提交或推送。
+快照日期：2026-07-21。项目负责人基础工作包已通过 PR #14 合并到 `main`。本轮
+在独立分支补齐控制、可信机制和验证治理规范；P1 Simulink 交接由独立 Draft PR
+#15 管理，不在本分支修改 Plant、EKF 或 runner。
 
 | 工作部分 | 当前状态 | 证据或说明 |
 |---|---|---|
 | 项目范围、路线和职责 | `FROZEN` | 章程、A/B/C 路线、五个工作包和唯一路径归属已写明 |
 | 数学模型语义 | `FROZEN` | 负载侧弹性力矩、齿轮方向、电机侧反射和能量检查已定义 |
-| 公共接口文档 | `FROZEN` | 字段、单位、枚举、失效行为和跨语言迁移规则已定义 |
+| 术语、符号和公共字段语义 | `FROZEN` | 字段、单位、枚举和失效行为已定义 |
 | JSON/Python 公共契约 | `IMPLEMENTED` | 三类力矩字段已进入输入 Schema 和 Python 类型；旧字段已禁止 |
+| 跨语言公共契约 | `PARTIAL` | MATLAB 为 `NOT FROZEN`，C 和 App 映射仍为 `MISSING` |
 | MATLAB 输入契约迁移 | `PENDING` | 由 Simulink 同学迁移 Plant 输出、Observer 输入和 runner |
 | 端到端输入链路 | `NOT_VERIFIED` | MATLAB 生产者和消费者尚未完成共同回放 |
-| P1/P2/P3 门禁 | `FROZEN` | 验收矩阵、实验协议、指标和证据规则已建立 |
-| 可信评分结构 | `DRAFT` | 输入、输出和失效原则已定义；权重和阈值等待有效证据 |
-| 事件触发规范 | `DRAFT` | `UPDATE/HOLD/ROLLBACK` 已定义；时间与阈值待实验 |
-| 模式状态机 | `DRAFT` | 四模式、优先级和恢复原则已定义；阈值待实验 |
+| P1/P2/P3 与集成门禁 | `FROZEN` | 验收矩阵、实验协议、指标和证据规则已建立 |
+| 可信评分设计 | `SPECIFIED`，未实现 | 输入、输出、失效、恢复和优先级已规定；权重和阈值待实验 |
+| 事件触发设计 | `SPECIFIED`，未实现 | `UPDATE/HOLD/ROLLBACK`、备份和禁止触发条件已规定 |
+| 模式管理设计 | `SPECIFIED`，未实现 | 四模式、优先级、冲突处理和恢复原则已规定 |
 | 模块目录规划 | `COMPLETED` | `configs`、`07_app`、`08_sil`、验证、Agent 和结果骨架已创建 |
-| Mock 接口样例 | `IMPLEMENTED` | 五个明确标记为 `MOCK` 的 JSON 联调样例，不是实验结果 |
+| Mock 接口样例 | `AVAILABLE` | 六个样例均标记 `data_source: MOCK` 且禁止算法评价 |
 | Plant / EKF / P1 runner | `UNCHANGED` | 本工作包没有修改 Simulink 同学的主体实现 |
-| Python 自动检查 | `PASSED` | `python3 -m pytest -q`：11 passed，覆盖 Schema、枚举、禁止字段、Mock 和输入类型 |
+| Python 自动检查 | `PASSED` | 本地 `python3 -m pytest -q`：17 passed；CI 结果以本分支实际运行为准 |
 | MATLAB / C/SIL / App 检查 | `NOT RUN` | 未进入对应主体实现或当前环境未复验 |
 
 ## 阶段状态
@@ -37,9 +39,10 @@ P3: BLOCKED
 
 ## 下一项目动作
 
-项目负责人先组织 Simulink 同学共同审查数学模型、三类力矩和 P1 验收矩阵。确认
-后，Simulink 同学在独立任务中迁移 MATLAB Plant/Observer 输入链路并重建 P1
-实验；项目负责人不在当前工作包中代写这些实现。
+项目负责人先完成本规范 PR 的非作者审查和一致性检查。随后由 Simulink 同学根据
+独立 P1 交接任务迁移 MATLAB Plant/Observer 输入链路；模型和输入一致性通过后，
+再重建三负载、10 seed P1 runner。项目负责人只审查契约、证据和阶段决定，不
+代写主体实现。
 
 其他同学可以完成接口审查和交付计划，但在 P1 形成有效 `PASS` 证据前，不启动
 P2/P3、完整 App、C/SIL 或 Test Agent 主体开发。
