@@ -2,16 +2,17 @@
 
 ## 状态快照
 
-快照日期：2026-07-21。仓库基线分支为 `main`；本轮负责人工作包扩展仍在本地
-工作区，尚未提交或推送。
+快照日期：2026-07-21。项目负责人基础工作包已通过 PR #14 合并到 `main`，建立
+本交接分支时本地 `main` 与 `origin/main` 同步且工作区干净。P1 Simulink 交接包
+在独立分支维护，不在 `main` 上直接修改。
 
 | 工作部分 | 当前状态 | 证据或说明 |
 |---|---|---|
 | 项目范围、路线和职责 | `FROZEN` | 章程、A/B/C 路线、五个工作包和唯一路径归属已写明 |
 | 数学模型语义 | `FROZEN` | 负载侧弹性力矩、齿轮方向、电机侧反射和能量检查已定义 |
-| 公共接口文档 | `FROZEN` | 字段、单位、枚举、失效行为和跨语言迁移规则已定义 |
+| 模型与公共字段语义 | `FROZEN` | 文档中的字段、单位、枚举、失效行为和迁移规则已定义 |
 | JSON/Python 公共契约 | `IMPLEMENTED` | 三类力矩字段已进入输入 Schema 和 Python 类型；旧字段已禁止 |
-| MATLAB 输入契约迁移 | `PENDING` | 由 Simulink 同学迁移 Plant 输出、Observer 输入和 runner |
+| MATLAB 输入契约迁移 | `PENDING` | 已建立交接单；由 Simulink 同学迁移 Plant 输出、Observer 输入和 runner |
 | 端到端输入链路 | `NOT_VERIFIED` | MATLAB 生产者和消费者尚未完成共同回放 |
 | P1/P2/P3 门禁 | `FROZEN` | 验收矩阵、实验协议、指标和证据规则已建立 |
 | 可信评分结构 | `DRAFT` | 输入、输出和失效原则已定义；权重和阈值等待有效证据 |
@@ -37,9 +38,12 @@ P3: BLOCKED
 
 ## 下一项目动作
 
-项目负责人先组织 Simulink 同学共同审查数学模型、三类力矩和 P1 验收矩阵。确认
-后，Simulink 同学在独立任务中迁移 MATLAB Plant/Observer 输入链路并重建 P1
-实验；项目负责人不在当前工作包中代写这些实现。
+下一主责同学为 Simulink 同学。其先依据
+[`p1_model_input_handoff.md`](04_collaboration/p1_model_input_handoff.md) 审查数学
+模型、三类力矩和 P1 验收矩阵，再在 `fix/p1-model-input-consistency` 分支迁移
+MATLAB Plant/Observer 输入链路。三负载、10 seed runner 属于后续恢复任务，不能
+在模型和输入一致性通过前用于生成新的 P1 结论。项目负责人只审查接口、证据和
+阶段门，不代写主体实现。
 
 其他同学可以完成接口审查和交付计划，但在 P1 形成有效 `PASS` 证据前，不启动
 P2/P3、完整 App、C/SIL 或 Test Agent 主体开发。
@@ -61,14 +65,15 @@ P2/P3、完整 App、C/SIL 或 Test Agent 主体开发。
 
 项目负责人向 Simulink 同学交付：
 
-1. [`system_architecture.md`](02_architecture/system_architecture.md) 中的模型与能量检查；
-2. [`glossary_and_symbols.md`](02_architecture/glossary_and_symbols.md) 中的符号和所在侧；
-3. [`interface_spec.md`](02_architecture/interface_spec.md) 中的三类力矩字段；
-4. [`cross_language_contract.md`](02_architecture/cross_language_contract.md) 中的 MATLAB 待迁移项；
-5. [`acceptance_matrix.md`](03_validation/acceptance_matrix.md) 中的 P1 强制门禁；
-6. [`experiment_protocol.md`](03_validation/experiment_protocol.md) 中的公平比较规则；
-7. [`evidence_management.md`](03_validation/evidence_management.md) 中的结果保存要求；
-8. [`probe_results.md`](03_validation/probe_results.md) 中保留的旧 P1 失败记录。
+1. [`p1_model_input_handoff.md`](04_collaboration/p1_model_input_handoff.md) 中的执行任务和验收表；
+2. [`system_architecture.md`](02_architecture/system_architecture.md) 中的模型与能量检查；
+3. [`glossary_and_symbols.md`](02_architecture/glossary_and_symbols.md) 中的符号和所在侧；
+4. [`interface_spec.md`](02_architecture/interface_spec.md) 中的三类力矩字段；
+5. [`cross_language_contract.md`](02_architecture/cross_language_contract.md) 中的 MATLAB 待迁移项；
+6. [`acceptance_matrix.md`](03_validation/acceptance_matrix.md) 中的 P1 强制门禁；
+7. [`experiment_protocol.md`](03_validation/experiment_protocol.md) 中的公平比较规则；
+8. [`evidence_management.md`](03_validation/evidence_management.md) 中的结果保存要求；
+9. [`probe_results.md`](03_validation/probe_results.md) 中保留的旧 P1 失败记录。
 
 Simulink 同学交回：
 
@@ -95,4 +100,5 @@ P1 基于有效证据 FAIL -> 由项目负责人组织 C 路线决策
 - MATLAB/C/App 尚未迁移项明确标为 `PENDING` 或 `BLOCKED`；
 - Plant、EKF、分类器、App 和 C/SIL 主体没有被本工作包接管；
 - 历史 P1 `FAIL` 与当前 `NOT_VERIFIED` 始终分层；
-- 至少一位其他同学完成审查后，才进入提交和合并流程。
+- 后续模块 PR 至少由一位非作者审查后才允许合并；PR #14 未记录非作者审查，
+  作为流程例外保留，不作为后续豁免依据。
