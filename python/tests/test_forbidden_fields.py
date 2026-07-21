@@ -1,45 +1,60 @@
-import json
-from pathlib import Path
+from dataclasses import fields
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-SCHEMA_DIRECTORY = REPOSITORY_ROOT / "common" / "schemas"
-
-
-def _schema_property_names(value: object) -> set[str]:
-    if isinstance(value, dict):
-        names = set(value.get("properties", {}))
-        for child in value.values():
-            names.update(_schema_property_names(child))
-        return names
-    if isinstance(value, list):
-        names: set[str] = set()
-        for child in value:
-            names.update(_schema_property_names(child))
-        return names
-    return set()
+from flexsense_guard import (
+    ClassificationOutput,
+    ConfidenceOutput,
+    ControlCommand,
+    ModeDecision,
+    ObserverEstimate,
+    ObserverInput,
+)
 
 
-def test_forbidden_public_fields_are_absent() -> None:
-    property_names: set[str] = set()
-    for schema_path in SCHEMA_DIRECTORY.glob("*.schema.json"):
-        schema = json.loads(schema_path.read_text(encoding="utf-8"))
-        property_names.update(_schema_property_names(schema))
+FORBIDDEN_RUNTIME_FIELDS = {
+    "motor_torque_measured_nm",
+    "motor_torque_nm",
+    "true_load_position_rad",
+    "true_load_velocity_rad_s",
+    "true_external_torque_nm",
+    "contact_probability",
+    "force_n",
+}
 
-    assert "contact_probability" not in property_names
-    assert "force_n" not in property_names
-    assert "motor_torque_nm" not in property_names
+
+def test_forbidden_public_fields_are_absent_from_all_schemas(
+    schema_documents: dict[str, dict[str, object]],
+) -> None:
+    serialized = repr(schema_documents)
+
+    for field_name in FORBIDDEN_RUNTIME_FIELDS:
+        assert field_name not in serialized
 
 
-def test_required_torque_fields_are_present() -> None:
-    schema = json.loads(
-        (SCHEMA_DIRECTORY / "motor_side_measurement.schema.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    properties = set(schema["properties"])
-
-    assert {
+def test_observer_input_excludes_command_applied_truth_and_parameters() -> None:
+    observer_fields = {field.name for field in fields(ObserverInput)}
+    forbidden = FORBIDDEN_RUNTIME_FIELDS | {
         "torque_command_nm",
         "motor_torque_applied_nm",
-        "motor_torque_measured_nm",
-    }.issubset(properties)
+        "motor_inertia_kg_m2",
+        "load_inertia_kg_m2",
+        "shaft_stiffness_nm_rad",
+        "shaft_damping_nms_rad",
+        "gear_ratio",
+    }
+
+    assert observer_fields.isdisjoint(forbidden)
+    assert "motor_torque_feedback_nm" in observer_fields
+    assert "torque_std_nm" in observer_fields
+
+
+def test_runtime_outputs_exclude_plant_truth() -> None:
+    for dto in (
+        ObserverEstimate,
+        ConfidenceOutput,
+        ClassificationOutput,
+        ModeDecision,
+        ControlCommand,
+    ):
+        assert {field.name for field in fields(dto)}.isdisjoint(
+            FORBIDDEN_RUNTIME_FIELDS | {"motor_torque_applied_nm"}
+        )

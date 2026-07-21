@@ -1,52 +1,75 @@
 from dataclasses import fields
-import json
-from pathlib import Path
 
-from jsonschema import Draft202012Validator
-
-from flexsense_guard import MotorSideMeasurement
-
-REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-INPUT_SCHEMA_PATH = (
-    REPOSITORY_ROOT / "common" / "schemas" / "motor_side_measurement.schema.json"
+from flexsense_guard import (
+    ActuatorCommand,
+    ArtifactIndexEntry,
+    CalibrationCandidate,
+    CalibrationDecision,
+    ClassificationOutput,
+    ConfidenceOutput,
+    ControlCommand,
+    ImmutablePlantTrueConfig,
+    IntegrationValidationResult,
+    ModeDecision,
+    NominalParameterVersion,
+    ObserverEstimate,
+    ObserverInput,
+    P1ValidationResult,
+    P2ValidationResult,
+    P3ValidationResult,
+    PlantInputTrace,
+    RawMotorMeasurement,
+    SignalHealthStatus,
+    SilValidationResult,
+    SystemStateSnapshot,
+    TorqueFeedback,
 )
 
 
-def _load_input_schema() -> dict[str, object]:
-    return json.loads(INPUT_SCHEMA_PATH.read_text(encoding="utf-8"))
+DTO_SCHEMAS = {
+    ActuatorCommand: "actuator_command.schema.json",
+    PlantInputTrace: "plant_input_trace.schema.json",
+    RawMotorMeasurement: "raw_motor_measurement.schema.json",
+    TorqueFeedback: "torque_feedback.schema.json",
+    SignalHealthStatus: "signal_health_status.schema.json",
+    ObserverInput: "observer_input.schema.json",
+    ObserverEstimate: "observer_estimate.schema.json",
+    ConfidenceOutput: "confidence_output.schema.json",
+    ClassificationOutput: "classification_output.schema.json",
+    ModeDecision: "mode_decision.schema.json",
+    SystemStateSnapshot: "system_state_snapshot.schema.json",
+    ControlCommand: "control_command.schema.json",
+    ImmutablePlantTrueConfig: "immutable_plant_true_config.schema.json",
+    NominalParameterVersion: "nominal_parameter_version.schema.json",
+    CalibrationCandidate: "calibration_candidate.schema.json",
+    CalibrationDecision: "calibration_decision.schema.json",
+    ArtifactIndexEntry: "artifact_index_entry.schema.json",
+    P1ValidationResult: "p1_validation_result.schema.json",
+    P2ValidationResult: "p2_validation_result.schema.json",
+    P3ValidationResult: "p3_validation_result.schema.json",
+    SilValidationResult: "sil_validation_result.schema.json",
+    IntegrationValidationResult: "integration_validation_result.schema.json",
+}
 
 
-def test_python_input_fields_match_schema() -> None:
-    schema_fields = set(_load_input_schema()["properties"])
-    python_fields = {field.name for field in fields(MotorSideMeasurement)}
+def test_python_dataclass_fields_match_json_schemas(
+    schema_documents: dict[str, dict[str, object]],
+) -> None:
+    for dto, schema_name in DTO_SCHEMAS.items():
+        python_fields = {field.name for field in fields(dto)}
+        schema_fields = set(schema_documents[schema_name]["properties"])
 
-    assert python_fields == schema_fields
-    assert "motor_torque_nm" not in schema_fields
-    assert {
-        "torque_command_nm",
-        "motor_torque_applied_nm",
-        "motor_torque_measured_nm",
-    }.issubset(schema_fields)
-    assert {
-        "true_load_position_rad",
-        "true_load_velocity_rad_s",
-        "true_external_torque_nm",
-    }.isdisjoint(schema_fields)
+        assert python_fields == schema_fields, schema_name
 
 
-def test_legacy_torque_field_is_rejected() -> None:
-    validator = Draft202012Validator(_load_input_schema())
-    invalid_measurement = {
-        "timestamp_s": 0.0,
-        "motor_position_rad": 0.0,
-        "motor_velocity_rad_s": 0.0,
-        "motor_current_a": 0.0,
-        "motor_torque_nm": 0.0,
-        "torque_command_nm": 0.0,
-        "encoder_valid": True,
-        "current_valid": True,
-        "timestamp_valid": True,
-        "saturation_flag": False,
-    }
+def test_validation_report_fields_match_envelope_plus_result(
+    schema_documents: dict[str, dict[str, object]],
+) -> None:
+    from flexsense_guard import ValidationReport
 
-    assert list(validator.iter_errors(invalid_measurement))
+    python_fields = {field.name for field in fields(ValidationReport)}
+    envelope_fields = set(
+        schema_documents["validation_report_envelope.schema.json"]["properties"]
+    )
+
+    assert python_fields == envelope_fields | {"result"}
