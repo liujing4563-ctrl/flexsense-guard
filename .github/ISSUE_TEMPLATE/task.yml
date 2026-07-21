@@ -20,12 +20,12 @@ body:
     attributes:
       label: 所属阶段
       options:
-        - PR-0 仓库基线
-        - PR-1 Plant
-        - PR-2 Observer
-        - PR-3 Confidence / trigger
-        - PR-4 Classification / control
-        - PR-5 SIL / app / test agent
-        - PR-6 Experiment / material freeze
+        - PR-0 项目基础、数学模型与输入契约冻结
+        - PR-1 Plant 输入修复与 P1 复验
+        - PR-2 状态分类与 P2
+        - PR-3 可信失效与 P3
+        - PR-4 控制与系统集成
+        - PR-5 SIL、App 与报告
+        - PR-6 实验和材料冻结
     validations:
       required: true

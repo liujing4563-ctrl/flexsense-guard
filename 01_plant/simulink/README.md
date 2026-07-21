@@ -1,8 +1,9 @@
-# Simulink Model — Interface Convention
+# Simulink 模型接口约定
 
 ## 目的
 
-本目录预留用于后续人工建立 Simulink (.slx) 模型。**文本工具无法可靠生成 .slx 二进制文件**，因此本阶段不创建 Simulink 模型，仅记录接口约定。
+本目录预留用于后续人工建立 Simulink（`.slx`）模型。文本工具无法可靠生成
+`.slx` 二进制文件，因此本阶段不创建 Simulink 模型，只记录接口约定。
 
 ## 接口约定
 
@@ -20,14 +21,14 @@
 
 ### 采样时间
 
-- 基础采样时间：1 ms (1000 Hz)
+- 基础采样时间：1 ms（1000 Hz）
 - 控制频率：与采样时间一致
 
 ### 文件命名
 
-- `flex_joint_plant.slx` — 主 Plant 模型
-- `flex_joint_observer.slx` — Observer 子系统
-- `probe_runner.slx` — 探针运行框架
+- `flex_joint_plant.slx`：主 Plant 模型
+- `flex_joint_observer.slx`：Observer 子系统
+- `probe_runner.slx`：探针运行框架
 
 ### 实现要求
 

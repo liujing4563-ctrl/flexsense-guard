@@ -1,15 +1,29 @@
-# License Notice
+# 许可与使用声明
 
-This repository contains source code, documentation, and simulation models developed for the **FlexSense-Guard** project — an entry for a robotics innovation design competition.
+本仓库包含为 **FlexSense-Guard** 项目开发的源代码、文档和仿真模型。该项目用于
+机器人创新设计比赛。
 
-## Purpose
-This code is shared for academic and competition purposes. It is not intended for industrial deployment or safety-critical applications.
+## 使用目的
 
-## No Warranty
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+本仓库内容仅用于学习、研究、比赛评审和学术交流，不面向工业部署或安全关键
+应用。
 
-## Third-Party Components
-See individual source files for third-party license information where applicable.
+## 不提供担保
 
-## Competition Use
-This work is submitted as part of a robotics innovation design competition. All experimental results are generated through simulation. No claims are made regarding hardware validation or industrial safety certification.
+本软件按“现状”提供，不附带任何明示或默示担保。使用者应自行评估代码、模型、
+数据和实验结论的适用性及风险。
+
+## 第三方组件
+
+如使用第三方代码、算法或资料，应在对应源文件或文档中保留其许可、引用和来源
+信息。第三方内容仍受其原许可约束。
+
+## 比赛与实验声明
+
+本项目作为机器人创新设计比赛作品提交。仓库中的实验结果来自仿真；除非另有
+可核验证据，不作真实硬件验证、工业部署或工业安全认证声明。
+
+## 公开材料边界
+
+本文件不是正式开源许可证，也不授予超出比赛和学术交流目的的权利。公开仓库
+不得包含专利、比赛敏感材料、个人数据或无权公开的第三方内容。

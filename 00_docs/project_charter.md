@@ -1,4 +1,6 @@
-# Project Charter: FlexSense-Guard
+# FlexSense-Guard 历史项目章程
+
+> 本文件仅用于历史追溯。当前章程以 [`docs/01_project/project_charter.md`](../docs/01_project/project_charter.md) 为准。
 
 ## 项目目标
 

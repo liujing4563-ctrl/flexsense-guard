@@ -1,5 +1,7 @@
 # 团队分工
 
+> 本文件仅用于历史追溯。当前职责以 [`docs/04_collaboration/team_responsibilities.md`](../docs/04_collaboration/team_responsibilities.md) 为准。
+
 ## 1. 项目负责人同学
 
 ### 职责
@@ -78,4 +80,3 @@
 2. 模块间通过 JSON Schema 定义的数据接口通信
 3. 每个同学的代码变更通过 PR 提交，至少一位其他同学审查
 4. 本阶段（仓库初始化 + 72h 探针）由项目负责人同学主导，其他同学熟悉代码库
-

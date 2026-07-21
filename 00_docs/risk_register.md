@@ -1,4 +1,6 @@
-# Risk Register
+# 历史风险登记册
+
+> 本文件仅用于历史追溯。当前风险以 [`docs/01_project/risk_register.md`](../docs/01_project/risk_register.md) 为准。
 
 ## 风险清单
 

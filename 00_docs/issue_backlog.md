@@ -1,4 +1,6 @@
-# Issue Backlog
+# 历史 Issue 清单
+
+> 本文件仅用于历史追溯。当前任务以 [`docs/04_collaboration/issue_backlog.md`](../docs/04_collaboration/issue_backlog.md) 为准。
 
 ## P0 — Probe 阶段（必须完成）
 

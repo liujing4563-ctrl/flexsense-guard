@@ -1,4 +1,6 @@
-# Git Workflow
+# 历史 Git 工作流
+
+> 本文件仅用于历史追溯。当前规范以 [`docs/04_collaboration/git_workflow.md`](../docs/04_collaboration/git_workflow.md) 为准。
 
 ## 分支策略
 
@@ -20,7 +22,7 @@ main  ← 生产就绪状态
 3. **PR 合入**：使用 Squash Merge 保持 main 历史整洁。
 4. **长期分支**：不允许存在长期 `develop` 分支。所有分支生命周期不超过一周。
 
-## Commit 规范
+## 提交规范
 
 使用 Conventional Commits 格式：
 
@@ -30,7 +32,7 @@ main  ← 生产就绪状态
 <可选正文>
 ```
 
-### Type 类型
+### 提交类型
 
 | Type | 用途 |
 |------|------|
@@ -53,7 +55,7 @@ chore: initialize CMake build system for SIL
 test: add smoke test for observer initialization
 ```
 
-## Pull Request 规范
+## 拉取请求规范
 
 1. PR 标题使用 Conventional Commits 格式
 2. PR 正文必须包含：

@@ -1,26 +1,28 @@
-# Experiment Protocol
+# 历史实验协议
+
+> 本文件仅用于历史追溯。当前规范以 [`docs/03_validation/experiment_protocol.md`](../docs/03_validation/experiment_protocol.md) 为准。
 
 ## 1. 场景定义
 
-### 1.1 正常加减速 (Nominal)
+### 1.1 正常加减速
 - 轨迹：正弦位置跟踪，幅值 1.0 rad，频率 0.5 Hz
 - 持续 10 秒
 - 无外部接触
 - 轻载荷
 
-### 1.2 柔性振动 (Vibration)
+### 1.2 柔性振动
 - 轨迹：正弦位置跟踪，幅值 0.5 rad，频率 2.0 Hz（接近共振频率）
 - 持续 10 秒
 - 无外部接触
 - 中等载荷
 
-### 1.3 外部冲击 (Collision)
+### 1.3 外部冲击
 - 轨迹：匀速运动，速度 0.5 rad/s
 - 持续 10 秒
 - 在 t=5.0s 注入脉冲外力矩
 - 轻载荷
 
-### 1.4 故障注入 (Fault Injection)
+### 1.4 故障注入
 - 在正常加减速场景基础上叠加：
   - 电流信号卡死
   - 编码器丢包
