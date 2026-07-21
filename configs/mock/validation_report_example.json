@@ -1,5 +1,7 @@
 {
     "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
     "schema_path": "common/schemas/validation_report.schema.json",
     "purpose": "仅用于报告字段联调，不是 P1、P2 或 P3 实验结果",
     "payload": {

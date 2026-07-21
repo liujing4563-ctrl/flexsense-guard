@@ -1,5 +1,7 @@
 {
     "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
     "schema_path": "common/schemas/motor_side_measurement.schema.json",
     "purpose": "仅用于公共输入契约联调，不代表 Plant 或硬件输出",
     "payload": {

@@ -1,0 +1,21 @@
+{
+    "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
+    "schema_path": "common/schemas/system_state.schema.json",
+    "purpose": "仅用于 App 柔性振动状态接口联调，不是实验结果，也不表示 P2 已通过",
+    "payload": {
+        "timestamp_s": 0.9,
+        "estimated_load_position_rad": 0.04,
+        "estimated_load_velocity_rad_s": 0.35,
+        "estimated_torsion_rad": 0.012,
+        "estimated_external_torque_nm": 0.2,
+        "innovation_norm": 0.7,
+        "confidence_score": 0.84,
+        "contact_score": 0.18,
+        "classification_state": "FLEXIBLE_VIBRATION",
+        "operation_mode": "VIBRATION_SUPPRESSION",
+        "valid_flag": true,
+        "reason_codes": ["NONE"]
+    }
+}

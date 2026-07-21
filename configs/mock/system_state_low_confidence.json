@@ -1,5 +1,7 @@
 {
     "fixture_type": "MOCK",
+    "data_source": "MOCK",
+    "valid_for_algorithm_evaluation": false,
     "schema_path": "common/schemas/system_state.schema.json",
     "purpose": "仅用于 App 低可信降级接口联调，不是故障实验结果",
     "payload": {
