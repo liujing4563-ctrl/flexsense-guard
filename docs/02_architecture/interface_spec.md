@@ -124,6 +124,21 @@ Mode Manager、Calibration 和 Controller 禁止读取 `motor_torque_applied_nm`
 `motor_torque_feedback_nm` 可以来自电流换算、独立传感器或受控执行器模型估计，
 不保证来自独立力矩传感器，也不等同于实际施加力矩。
 
+来源语义固定如下，但具体估计器实现不在本规范中固定：
+
+- `CURRENT_ESTIMATE`：由电流和版本化转矩常数换算到电机轴侧；必须记录常数版本、
+  有效性和所在侧，不能把负载侧力矩直接当成电机轴侧力矩；
+- `TORQUE_SENSOR`：独立转矩传感器经单位和所在侧换算后的电机轴侧反馈；
+- `ACTUATOR_MODEL`：运行时执行器模型的估计输出，不等于、不得复制仿真真值
+  `motor_torque_applied_nm`；
+- `UNKNOWN`：来源不可确认，默认不得用于正常 Observer 更新。
+
+`torque_std_nm` 表示同一电机轴侧反馈的不确定度标准差，不是噪声为零的占位值。
+`torque_valid=false` 时 Observer 禁止执行正常测量更新；采用预测保持、降级或拒绝
+样本由 Observer 规范在 P1 前批准，本接口不预先固定算法策略。App 对
+`CURRENT_ESTIMATE` 或 `ACTUATOR_MODEL` 应显示“电机转矩反馈估计”，只有
+`TORQUE_SENSOR` 才能显示为传感器测量。
+
 ### `SignalHealthStatus`
 
 包含 `timestamp_s`、`encoder_valid`、`current_valid`、`timestamp_valid`、
@@ -189,7 +204,9 @@ reason_codes
 ```
 
 `operation_mode` 表示运行策略，危险锁存表示危险记忆，安全动作级别表示 Controller
-必须执行的最小保守包络。低可信模式不得清除危险锁存或减弱安全动作。
+必须执行的最小保守包络。`ModeDecision` 由 Safety Supervisor 统一产生：Mode Manager
+只提供运行模式候选，Classification/Contact Logic 只提供危险证据，二者均无权设置
+或清除锁存。低可信模式不得清除危险锁存或减弱安全动作。
 
 ### `SystemStateSnapshot`
 
@@ -268,6 +285,10 @@ motor_torque_applied_nm
 只要求各自适用指标；不适用指标必须省略，不得使用 `0.0` 表示 N/A。完整定义见
 [`evidence_management.md`](../03_validation/evidence_management.md) 和
 `common/schemas/validation_report.schema.json`。
+
+公共 envelope 只强制跨阶段可追溯字段。`algorithm_version`、`random_seed`、
+`software_environment` 和 `runtime_ms` 按实验适用性填写；多模块 Integration 使用
+`result.component_versions` 记录组件版本，不用空字符串或零值补齐不适用字段。
 
 ## 失效和兼容规则
 

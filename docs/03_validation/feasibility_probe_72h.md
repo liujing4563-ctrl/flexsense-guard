@@ -101,8 +101,15 @@ load_velocity_baseline = motor_velocity / gear_ratio
 胜出”暂保留为 `PROVISIONAL ENGINEERING GATE`。本轮不静默改成其他数值。该门限
 不是工业标准或统计定理，必须结合任务精度和 baseline 水平重新确认。
 
+位置/速度 RMSE、最大瞬时误差、逐负载判定、多 seed 聚合、允许失败 seed 数和
+NaN/Inf/发散计入方式，必须在正式评价集解封前预注册。门限只能在解封前修改；每次
+修改必须记录 Decision ID、依据、批准人和适用配置。评价集解封后不得再修改本轮门限，
+需要修改时必须结束当前活动并建立新的未见评价配置和实验 ID。
+
 P1-A 未通过不表示负载侧状态不可估计。如果 P1-V 通过而 P1-A 未通过，进入
-`P1_REFRAME_REVIEW`，决定缩减为 B 路线、重新定位创新点或经批准后调整路线。
+`P1_REFRAME_REVIEW`，并且只能决定 `CONTINUE_TO_ROUTE_B`、
+`ONE_BOUNDED_REPAIR` 或 `ENTER_ROUTE_C`。有限修复最多一次，不得使用已解封评价集
+调参；修复后必须使用新的独立评价配置。
 
 ## P2：状态可分辨性
 

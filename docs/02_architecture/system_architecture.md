@@ -66,6 +66,10 @@ q_dot = omega_g - omega_l
 `theta_g` 与 `theta_l` 由柔性元件隔开，二者不能写成恒等关系；否则会错误地令
 `q=0` 并消除项目要研究的柔性动态。
 
+`theta_g` 和 `omega_g` 是由电机状态与齿轮比即时计算的代数量，不是第三个独立惯量，
+也不要求加入 Observer 状态。P1 候选状态仍可保持
+`[theta_m, omega_m, theta_l, omega_l, tau_ext]`。
+
 `tau_s_load_nm` 是负载侧传动弹性力矩：
 
 ```text
@@ -133,7 +137,8 @@ RawMotorMeasurement + torque conversion source
 
 `motor_torque_feedback_nm` 可以来自电流换算、转矩传感器或受控执行器模型估计，
 必须同时提供来源、有效性和标准差。它不保证来自独立转矩传感器，也不等同于
-`motor_torque_applied_nm`。
+`motor_torque_applied_nm`。特别是 `ACTUATOR_MODEL` 只能使用运行时可得输入和名义
+参数，不能读取或复制 Plant 的实际施加力矩追踪值。
 
 ## 配置域隔离
 
@@ -186,9 +191,10 @@ Plant 或 Offline Validation，不得出现在 `ObserverInput` 中。
 | Signal Health | 原始测量和转矩反馈 | `SignalHealthStatus` | 不估计负载状态 |
 | Observer | `ObserverInput`、名义参数 | `ObserverEstimate` | 禁止读取 applied torque 和 Plant 真值 |
 | Confidence | Observer 和 Health 输出 | `ConfidenceOutput` | 评分不是概率，不依赖 Classifier |
-| Classification | Estimate 和 Confidence | `ClassificationOutput` | P2 前不得宣称可靠辨识 |
-| Mode Manager | Confidence、Classification、危险状态 | `ModeDecision` | 模式不得清除危险锁存 |
-| Controller | 参考、估计、ModeDecision | `ControlCommand` | 动作不得弱于安全包络 |
+| Classification/Contact Logic | Estimate 和 Confidence | `ClassificationOutput`、接触危险证据 | 只提交证据，无权锁存或清除危险 |
+| Mode Manager | Confidence、Classification、只读危险状态 | 运行模式候选（内部） | 无权写入或清除危险锁存 |
+| Safety Supervisor | 接触危险证据、Signal Health、运行模式候选、锁存状态 | `ModeDecision` | 唯一允许设置和清除危险锁存的模块 |
+| Controller | 参考、估计、`ModeDecision` | `ControlCommand` | 动作不得弱于安全包络 |
 | Calibration | 运行时诊断和当前名义版本 | `CalibrationCandidate` | 不直接修改参数或模式 |
 | Acceptance | 候选、代理指标、备份 | `CalibrationDecision` | 不在线读取负载侧真值 |
 | Validation | 真值、追踪数据、只读快照 | 阶段报告 | 不向运行时链路回流真值 |

@@ -16,7 +16,8 @@
     "software_environment": {
       "type": "object",
       "minProperties": 1,
-      "additionalProperties": {"type": "string"}
+      "propertyNames": {"minLength": 1},
+      "additionalProperties": {"type": "string", "minLength": 1}
     },
     "decision": {"$ref": "contract_common.schema.json#/$defs/verification_decision"},
     "valid_flag": {"type": "boolean"},
@@ -24,5 +25,5 @@
     "artifact_index": {"type": "array", "items": {"$ref": "artifact_index_entry.schema.json"}},
     "runtime_ms": {"type": "number", "minimum": 0}
   },
-  "required": ["schema_version", "report_id", "experiment_id", "stage", "git_commit", "algorithm_version", "configuration_id", "scenario_id", "random_seed", "software_environment", "decision", "valid_flag", "failure_reason_codes", "artifact_index", "runtime_ms"]
+  "required": ["schema_version", "report_id", "experiment_id", "stage", "git_commit", "configuration_id", "scenario_id", "decision", "valid_flag", "failure_reason_codes", "artifact_index"]
 }

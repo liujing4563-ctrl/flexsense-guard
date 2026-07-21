@@ -625,17 +625,17 @@ class ValidationReport:
     experiment_id: str
     stage: ValidationStage
     git_commit: str
-    algorithm_version: str
     configuration_id: str
     scenario_id: str
-    random_seed: int
-    software_environment: dict[str, str]
     decision: VerificationDecision
     valid_flag: bool
     failure_reason_codes: tuple[str, ...]
     artifact_index: tuple[ArtifactIndexEntry, ...]
-    runtime_ms: float
     result: ValidationResult
+    algorithm_version: str | None = None
+    random_seed: int | None = None
+    software_environment: dict[str, str] | None = None
+    runtime_ms: float | None = None
 
     def __post_init__(self) -> None:
         _validate_version(self.schema_version)
@@ -643,19 +643,23 @@ class ValidationReport:
             "report_id",
             "experiment_id",
             "git_commit",
-            "algorithm_version",
             "configuration_id",
             "scenario_id",
         ):
             _validate_nonempty_text(getattr(self, name), name)
-        if self.random_seed < 0:
+        if self.algorithm_version is not None:
+            _validate_nonempty_text(self.algorithm_version, "algorithm_version")
+        if self.random_seed is not None and self.random_seed < 0:
             raise ValueError("random_seed must be non-negative")
-        if not self.software_environment or any(
-            not key.strip() or not value.strip()
-            for key, value in self.software_environment.items()
+        if self.software_environment is not None:
+            if not self.software_environment or any(
+                not key.strip() or not value.strip()
+                for key, value in self.software_environment.items()
+            ):
+                raise ValueError("software_environment must be non-empty when provided")
+        if self.runtime_ms is not None and (
+            not isfinite(self.runtime_ms) or self.runtime_ms < 0
         ):
-            raise ValueError("software_environment must be non-empty")
-        if not isfinite(self.runtime_ms) or self.runtime_ms < 0:
             raise ValueError("runtime_ms must be non-negative")
         expected_type = {
             ValidationStage.P1: P1ValidationResult,

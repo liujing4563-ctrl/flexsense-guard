@@ -17,7 +17,8 @@
 | Signal Health | 检查时间戳、编码器、电流、转矩反馈和数据新鲜度的模块 |
 | Confidence | 根据归一化残差、信号健康、物理合理性和模型适用性产生工程评分的机制 |
 | Classification | 根据允许的估计与特征输出分类状态和接触证据评分的模块 |
-| Mode Manager | 产生运行模式、危险锁存和最小安全动作级别的模块 |
+| Mode Manager | 根据 Confidence、Classification 和当前危险状态提出运行模式策略；无权写危险锁存 |
+| Safety Supervisor | 危险锁存的唯一状态所有者，组合运行策略与锁存要求并产生最终 `ModeDecision` |
 | Calibration | 生成候选名义参数的受控过程，不直接更新 Plant 或当前名义版本 |
 | Acceptance | 对候选名义参数作 `UPDATE`、`HOLD` 或 `ROLLBACK` 决定的过程 |
 | Offline Validation | 唯一允许使用仿真真值计算指标和阶段结论的离线过程 |
@@ -68,7 +69,7 @@
 | `ObserverEstimate` | 负载状态、外扰估计和归一化残差 | Confidence、Classification、Validation |
 | `ConfidenceOutput` | `valid_flag`、工程评分和原因码 | Classification、Mode、Validation |
 | `ClassificationOutput` | 分类和接触证据评分 | Mode、Validation |
-| `ModeDecision` | 运行模式、危险锁存和安全动作级别 | Controller、Validation |
+| `ModeDecision` | Safety Supervisor 输出的运行模式、危险锁存和安全动作级别 | Controller、Validation |
 | `SystemStateSnapshot` | 上述输出的只读时间对齐快照 | App、报告、Validation |
 
 `motor_torque_applied_nm` 是仿真 Plant 输入追踪值。Observer 只允许读取

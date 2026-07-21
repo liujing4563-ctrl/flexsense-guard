@@ -1,7 +1,7 @@
 # 当前状态与下一步
 
 本文件是项目当前阶段状态的唯一权威来源。其他文档定义规则、模型和长期路线，
-不得重复维护详细当前状态。快照日期：2026-07-21。
+不得重复维护详细当前状态。快照日期：2026-07-22。
 
 ## 状态体系
 
@@ -58,15 +58,21 @@ P1 中可以记录外部扰动力矩误差作为诊断指标，但它不是 P1-V
 - A 路线要求 P1-V、P1-A、P2-VIB、P2-CONTACT 和三个 P3 子门全部通过。
 - B 路线用于 P1-V 通过、但 P1-A、P2 或 P3 至少一项未通过的缩减交付；只保留
   已通过对应门禁的能力。
-- `P1_REFRAME_REVIEW` 表示 P1-V 通过但 P1-A 未建立优势，需要决定进入 B 路线、
-  重新定义创新点，或经批准后调整路线。
-- C 路线只有在有效、可复验的 P1-V 仍失败时才可启动 SafeTune-J。
+- `P1_REFRAME_REVIEW` 表示 P1-V 通过但 P1-A 未建立优势，只能选择
+  `CONTINUE_TO_ROUTE_B`、一次 `ONE_BOUNDED_REPAIR` 或 `ENTER_ROUTE_C`。
+- C 路线可由有效 P1-V 失败触发，也可由 `P1_REFRAME_REVIEW` 通过 Decision ID
+  主动选择；后一种情况不能改写 P1-V 的真实结果。
 
 ## 下一项目动作
 
-当前唯一动作是完成 Draft PR #16 的规范整改和非作者审查。PR #16 合并后，
-Simulink 同学再基于更新后的 `main` 同步 PR #15，确认数学模型并修复 MATLAB
-Plant、Observer 和 P1 输入链。
+Draft PR #16 的修改范围现已收口，独立人工审查尚未完成，因此规范仍为 `REVIEWED`，
+不得称为 `APPROVED` 或 `FROZEN`。从现在起该 PR 只接受审查意见修订、测试修复和
+事实性纠错，不再新增 Schema、模式或规范主题。
+
+当前唯一动作是请求 Simulink 同学审查数学和 MATLAB 可实现性，并请求计算机软件
+或嵌入式 Linux 同学审查跨语言契约可实现性。PR #16 获得非作者批准并合并后，
+Simulink 同学再基于更新后的 `main` 同步 PR #15，确认数学模型并修复 MATLAB Plant、
+Observer 和 P1 输入链。
 
 P1 形成有效 `PASS` 证据前，其他同学只能进行接口审查和交付计划，不启动 P2/P3、
 完整 App、C/SIL 或 Test Agent 主体开发。
@@ -75,7 +81,7 @@ P1 形成有效 `PASS` 证据前，其他同学只能进行接口审查和交付
 
 | 同学 | 主责路径 | 当前任务 | 禁止事项 |
 |---|---|---|---|
-| 项目负责人同学 | `docs/**`、`common/schemas/**`、`python/**` 及责任矩阵指定路径 | 完成 PR #16 规范整改、契约测试和审查 | 不修改 Plant、EKF、runner、分类器、App 或 C/SIL 主体 |
+| 项目负责人同学 | `docs/**`、`common/schemas/**`、`python/**` 及责任矩阵指定路径 | 锁定 PR #16 范围、发起非作者审查并处理审查意见 | 不修改 Plant、EKF、runner、分类器、App 或 C/SIL 主体 |
 | Simulink 同学 | `01_plant/**`、`02_observer/**`、P1 runner、`results/p1/**` | 审查 PR #16 数学与输入规范；随后同步 PR #15 并修复 MATLAB | 不使用原始指令代替转矩反馈，不使用评价真值调参 |
 | 深度学习通感算同学 | `04_classification/**`、`09_test_agent/**` 及 P2 验证路径 | 审查 P2-VIB/P2-CONTACT 输入输出和数据隔离 | P1-V 通过前不启动分类训练和正式 P2/P3 结果 |
 | 计算机软件同学 | `configs/**`、报告和 `07_app/**` | 审查 v2 Schema、Mock、错误状态和报告映射 | 不把 Mock 当实验结果，不开发完整 App |

@@ -94,6 +94,13 @@ Reversal condition:
 - **Affected files**：项目章程、阶段门、实验协议、报告 Schema 和 Issue。
 - **Reversal condition**：只有新的有效证据或范围变更经审查后才能调整子门关系。
 
+### P1_REFRAME_REVIEW 约束补充
+
+该状态只能输出 `CONTINUE_TO_ROUTE_B`、`ONE_BOUNDED_REPAIR` 或 `ENTER_ROUTE_C`。
+每个 P1 评价活动最多一次有限修复；门限只能在评价集解封前修改并记录 Decision ID。
+修复后使用新的独立评价配置。若 P1-V 已通过后主动进入 C，记录为范围决定，不把
+P1-V 改写为失败。
+
 ## DEC-007：隔离真值配置与名义参数
 
 - **Date**：2026-07-21

@@ -100,7 +100,8 @@ EXTERNAL_DYNAMIC_SUSPECTED
 ## 与其他模块关系
 
 - Classification 可以读取 Confidence；低可信时必须保留原因，不把评分称为概率；
-- Mode Manager 使用硬有效性和软评分，但负责最终模式和安全动作；
+- Mode Manager 使用硬有效性和软评分提出运行策略；Safety Supervisor 负责最终危险
+  锁存和安全动作包络；
 - Confidence 下降只能提出校准候选，不能批准校准；
 - 接触危险锁存、低可信降级或硬失效时禁止校准；
 - P3 通过前，Confidence 只能用于诊断和展示，不能驱动安全模式。

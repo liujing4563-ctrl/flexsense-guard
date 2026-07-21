@@ -21,7 +21,7 @@ results/
 
 ## 公共 Evidence Envelope
 
-每份阶段报告至少包含：
+每份阶段报告至少包含以下跨阶段元数据：
 
 | 字段 | 要求 |
 |---|---|
@@ -30,17 +30,25 @@ results/
 | `experiment_id` | 全局唯一且不可复用的实验标识 |
 | `stage` | `P1`、`P2`、`P3`、`SIL` 或 `INTEGRATION` |
 | `git_commit` | 实际运行对应的完整提交标识 |
-| `algorithm_version` | 被测算法版本 |
 | `configuration_id` | 版本化配置标识 |
 | `scenario_id` | 场景标识 |
-| `random_seed` | 非负随机种子，包含 seed 0 |
-| `software_environment` | 操作系统、MATLAB/Python/编译器和依赖版本 |
 | `decision` | `PASS`、`FAIL` 或 `NOT_VERIFIED` |
 | `valid_flag` | 报告和必需证据是否有效 |
 | `failure_reason_codes` | 失败、无效或未验证原因；无原因时为空数组 |
 | `artifact_index` | 原始数据、日志、图、配置和校验值索引 |
-| `runtime_ms` | 报告所声明计时边界对应的运行时间 |
 | `result` | 与 `stage` 对应的阶段 payload |
+
+以下字段仅在适用时填写，不适用时省略：
+
+| 字段 | 适用规则 |
+|---|---|
+| `algorithm_version` | 单一算法被测时填写；多模块集成在 `result.component_versions` 记录版本映射 |
+| `random_seed` | 随机实验填写非负 seed，必须允许 seed 0；确定性集成或文档审查可省略 |
+| `software_environment` | 环境影响可复现性或结论时填写结构化对象，不使用自由文本或空对象 |
+| `runtime_ms` | 声明并实际测量运行时间边界时填写；未计时的报告省略 |
+
+可选字段一旦出现就必须满足其类型和非空约束，不得用空字符串、空对象、负数或其他
+占位值表示 N/A。
 
 `ArtifactIndexEntry` 记录 artifact ID、类型、受控 URI、SHA-256、大小、保管人和可用
 状态。外部证据不可访问或校验失败时，报告不得 `PASS`。

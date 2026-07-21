@@ -5,9 +5,22 @@
 实现；现有 `mode_manager.m` 是 `OUTDATED / NON-COMPLIANT IMPLEMENTATION`，本规范
 不修改其源码。
 
-## 三个正交输出
+## 责任拆分
 
-Mode Manager 必须分开输出：
+运行策略和安全监督链必须保持单写者：
+
+```text
+Classification / Contact Logic 产生接触危险证据
+-> Safety Supervisor 设置或保持危险锁存
+Mode Manager 读取锁存状态并提出 operation_mode
+-> Safety Supervisor 组合模式与锁存要求
+-> ModeDecision
+```
+
+Mode Manager 无权设置或清除 `contact_hazard_latched`。Safety Supervisor 是锁存状态的
+唯一所有者，也是最终 `ModeDecision` 的生产者。该职责边界不要求本轮新增算法实现。
+
+`ModeDecision` 必须分开承载：
 
 1. `operation_mode`：当前运行策略；
 2. `contact_hazard_latched`：已确认接触危险的记忆；
@@ -40,9 +53,16 @@ STOP_REQUEST
 
 ## 危险锁存
 
-- 有效 P2-CONTACT 证据触发后，设置 `contact_hazard_latched=true`；
-- 低可信、模式切换或单个无接触样本不得清除锁存；
-- 清除必须满足接触解除证据、信号连续有效、最小保持时间和恢复窗口；
+- Classification/Contact Logic 只能提交危险证据；有效 P2-CONTACT 证据由 Safety
+  Supervisor 判定后设置 `contact_hazard_latched=true`；
+- 只有 Safety Supervisor 可以清除锁存；Mode Manager、Classifier、Controller 和
+  Calibration 均无清除权限；
+- 清除必须同时满足接触解除证据、信号连续有效、最小保持时间和恢复窗口；连续时间、
+  窗口和人工复位条件必须在 P3-ACTION/P3-RECOVERY 前预注册；
+- 低可信期间、时间戳无效或数据陈旧期间禁止清除，已有锁存保持；
+- 新仿真案例只有在可信案例边界初始化时可从 `false` 开始；案例内重启必须恢复已保存
+  锁存。保存状态缺失或校验失败时按保守状态启动：锁存为 `true` 且动作至少
+  `SLOWDOWN`，直到 Safety Supervisor 完成恢复判定；
 - P2-CONTACT 通过前，Mock 中的危险锁存只用于契约联调，不能驱动真实安全声明。
 
 ## 冲突处理
@@ -79,8 +99,10 @@ effective_safety_action
 
 ## 与其他模块关系
 
-- Confidence 不直接写模式；
-- Classification 提供分类和接触证据，但只有通过对应 P2 子门后才能驱动模式；
+- Confidence 不直接写模式或危险锁存；
+- Classification 提供分类和接触证据，但无权写锁存，且只有通过对应 P2 子门后才能
+  进入 Safety Supervisor 的正式危险判定；
+- Mode Manager 只提出运行策略，Safety Supervisor 产生最终 `ModeDecision`；
 - Calibration 在危险锁存、`SAFE_SLOWDOWN` 或 `LOW_CONFIDENCE_DEGRADED` 时必须中止；
 - Controller 必须执行不弱于 `safety_action_level` 的控制限制；
 - P3-ACTION 通过前，ModeDecision 只能用于契约联调和诊断。
