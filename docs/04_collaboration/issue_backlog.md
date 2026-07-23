@@ -8,6 +8,11 @@
 | GOV-02 | 建立五个工作包、唯一路径归属和目录骨架 | 项目负责人同学 | 无 |
 | CON-01 | 迁移 Python/Schema v2 公共契约 | 项目负责人同学 | DTO 规范审查 |
 | CON-02 | 迁移 MATLAB v2 输入链路 | Simulink 同学 | P1-01、CON-01 |
+| PL-READY-01 | 建立项目负责人并行准备与审查组织 | 项目负责人同学 | PR #16 保持 Draft |
+| SIM-PREP-01 | 审查 P1 数学模型并制定 MATLAB 实施计划 | Simulink 同学 | PR #16 候选规范 |
+| P2-PREP-01 | 制定 P2 场景、标签和数据需求 | 深度学习通感算同学 | v2 DTO 和 P2 子门框架 |
+| APP-PREP-01 | 制定 Mock 驱动的只读 App 原型方案 | 计算机软件同学 | v2 Schema 和 Mock |
+| SIL-PREP-01 | 制定 C/SIL 工具链和跨语言映射方案 | 嵌入式 Linux 同学 | v2 Schema/Python 类型 |
 | P1-01 | 共同确认理想齿轮、带符号力矩和 DTO 边界 | 项目负责人同学 | PR #16 审查 |
 | P1-02 | 修正 MATLAB Plant 力矩反射和 PlantInputTrace | Simulink 同学 | P1-01 |
 | P1-03 | 对齐 ObserverInput、状态转移和雅可比 | Simulink 同学 | P1-01、P1-02 |
@@ -28,6 +33,118 @@
 
 每个可领取 Issue 必须包含：背景、目标、输入、输出、涉及文件、不涉及内容、验收
 命令、负责同学、交接对象、依赖和风险。缺少任一项时不得进入主体实现。
+
+并行准备任务的完整边界见
+[`team_parallel_preparation_plan.md`](team_parallel_preparation_plan.md)，统一格式见
+[`module_work_package_template.md`](module_work_package_template.md)。
+
+## PL-READY-01：建立项目负责人并行准备与审查组织
+
+- **背景**：PR #16 已具备审查条件，但尚无真人 Review；各模块需要可领取的准备任务。
+- **目标**：维护状态、依赖、风险、Issue 和审查记录，组织模块交接，不实现主体算法。
+- **主责**：项目负责人同学。
+- **审查人**：Simulink 同学及至少一位非作者模块同学。
+- **输入**：PR #16、权威状态文件、职责矩阵、风险登记和模块反馈。
+- **输出**：Review 意见表、五个工作包、依赖图、Issue 清单、交付检查表和规范验证矩阵。
+- **涉及文件**：`docs/**`、协作 Issue 和 PR Review。
+- **禁止范围**：Plant、EKF、runner、分类器、Confidence、Mode、App、C/SIL 和
+  Test Agent 主体；任何正式性能数据。
+- **依赖**：PR #16 保持 Draft，所有状态与权威状态文件一致。
+- **交接对象**：全部模块同学。
+- **验收**：每项任务有唯一主责、输入生产者、输出消费者、依赖、禁止范围和可定位交付；
+  主体算法路径改动为 0。
+- **测试**：Markdown 链接检查、状态一致性检查、禁止路径检查。
+- **风险**：准备工作被误写成实现完成；发现后阻止合并并纠正状态。
+- **当前状态**：
+  `Specification Status: DRAFT`；
+  `Implementation Status: PARTIAL`；
+  `Verification Status: NOT_VERIFIED`。
+
+## SIM-PREP-01：审查 P1 数学模型并制定 MATLAB 实施计划
+
+- **背景**：MATLAB Plant/EKF 仍为 `INVALID`，旧 P1 证据无效且 PR #16 数学内容待确认。
+- **目标**：审查数学、力矩反射、输入边界和配置隔离，形成文件影响及测试计划。
+- **主责**：Simulink 同学。
+- **审查人**：项目负责人同学。
+- **输入**：系统架构、术语表、接口规范、P1-V/P1-A 门禁、当前 MATLAB 文件。
+- **输出**：数学审查表、MATLAB 文件影响清单、P1 测试计划、待确认问题和 PR Review。
+- **涉及文件**：PR Review、`01_plant/simulink/README.md` 等现有准备说明。
+- **禁止范围**：`01_plant/matlab/**`、`02_observer/**`、P1 runner、Q/R/P 和算法门限。
+- **依赖**：PR #16 候选规范。
+- **交接对象**：项目负责人同学；后续 P1-02 至 P1-05。
+- **验收**：定义逐项使用 `APPROVE/NEEDS_REVISION/NOT_SURE`；DTO 有 MATLAB 映射建议；
+  能量、雅可比、符号、seed 0、P1-V/P1-A 测试方案可执行。
+- **测试**：本任务只审查方案；MATLAB execution 记录为 `NOT RUN`，不得伪造运行结果。
+- **风险**：未独立推导就认可候选公式；存在不确定项时必须标 `NOT_SURE`。
+- **当前状态**：
+  `Specification Status: DRAFT`；
+  `Implementation Status: MISSING`；
+  `Verification Status: NOT_VERIFIED`。
+
+## P2-PREP-01：制定 P2 场景、标签和数据需求
+
+- **背景**：P2 正式开发被 P1-V 阻断，但场景和数据契约可提前准备。
+- **目标**：分开定义 P2-VIB/P2-CONTACT 的场景、标签、信号需求、数据隔离和事件级评价。
+- **主责**：深度学习通感算同学。
+- **审查人**：项目负责人同学；Simulink 同学审查信号可提供性。
+- **输入**：v2 DTO、P2 子门、指标定义、真值隔离规则和可提供场景信号。
+- **输出**：场景表、标签规则、信号及候选特征表、事件级指标、数据依赖图和阻塞项。
+- **涉及文件**：`04_classification/datasets/README.md`、
+  `06_validation/fault_injection/README.md`、`06_validation/monte_carlo/README.md`。
+- **禁止范围**：分类器训练、最终阈值、运行时真值特征、正式 P2 实验和性能结论。
+- **依赖**：v2 DTO 与 P2 子门框架；正式开发仍依赖 P1-V `PASS`。
+- **交接对象**：Simulink 同学、项目负责人同学和后续 P2 实现。
+- **验收**：至少覆盖正常运动、柔性振动、摩擦变化和外部接触；误报漏报按事件统计；
+  训练/验证/测试划分和混淆场景明确。
+- **测试**：字段生产者检查、真值泄漏审查和数据划分复核；不运行 P2 算法。
+- **风险**：提前选择最终特征或阈值导致评价污染；本任务只保留候选和规则。
+- **当前状态**：
+  `Specification Status: DRAFT`；
+  `Implementation Status: MISSING`；
+  `Verification Status: NOT_VERIFIED`。
+
+## APP-PREP-01：制定 Mock 驱动的只读 App 原型方案
+
+- **背景**：App 主体受 P1-V 阻断，但可用 Mock 审查页面和字段契约。
+- **目标**：建立页面信息架构、DTO 到 UI 映射以及缺失、无效和版本不兼容状态规则。
+- **主责**：计算机软件同学。
+- **审查人**：项目负责人同学；数据生产模块审查字段语义。
+- **输入**：v2 Schema、Mock、枚举、单位、失效规则和 Evidence Envelope。
+- **输出**：页面结构、字段—组件映射、页面状态、Mock 说明和低保真原型说明。
+- **涉及文件**：`07_app/**` 和 `06_validation/reports/README.md` 的现有准备说明。
+- **禁止范围**：App 主体代码、真实算法接入、实时控制链、虚构准确率或性能提升。
+- **依赖**：v2 Schema/Mock；真实集成仍依赖稳定契约和真实生产者。
+- **交接对象**：项目负责人同学和后续 App 实现。
+- **验收**：所有 Mock 页面显示 `MOCK DATA` 与 `NOT FOR ALGORITHM EVALUATION`；
+  工程评分不显示为概率；状态和数据来源可区分。
+- **测试**：Mock Schema 回放设计审查、字段覆盖和错误状态清单审查。
+- **风险**：Mock 被误认为真实结果；标识不得被页面模式或截图裁掉。
+- **当前状态**：
+  `Specification Status: DRAFT`；
+  `Implementation Status: MISSING`；
+  `Verification Status: NOT_VERIFIED`。
+
+## SIL-PREP-01：制定 C/SIL 工具链和跨语言映射方案
+
+- **背景**：C 映射为 `MISSING`，且当前没有有效 MATLAB 参考，不允许移植旧 EKF。
+- **目标**：形成工具链、DTO 到 C 映射、回放、一致性、资源和异常保护计划。
+- **主责**：嵌入式 Linux 同学。
+- **审查人**：项目负责人同学；Simulink 同学审查参考输入输出。
+- **输入**：v2 Schema/Python 类型、单位、枚举、失效规则和未来 MATLAB 测试向量。
+- **输出**：工具链清单、C 类型映射、SIL I/O、回放、一致性、runtime/memory 方案和阻塞项。
+- **涉及文件**：`08_sil/**` 的现有 README 准备说明。
+- **禁止范围**：任何 `.c`、`.h`、`.cpp`，旧 Plant/EKF 移植，稳定 ABI 声明和
+  MATLAB 算法修改。
+- **依赖**：v2 契约；正式迁移依赖获批接口和有效 MATLAB 参考。
+- **交接对象**：项目负责人、Simulink 和计算机软件同学。
+- **验收**：每个字段有 C 类型和有效性建议；版本/未知枚举显式失败；回放含版本、
+  配置和校验；资源测量声明平台与边界。
+- **测试**：映射审查和测试计划评审；C/SIL execution 记录为 `NOT RUN`。
+- **风险**：过早固定 `PARTIAL` 契约形成错误 ABI；正式头文件必须等待接口批准。
+- **当前状态**：
+  `Specification Status: DRAFT`；
+  `Implementation Status: MISSING`；
+  `Verification Status: NOT_VERIFIED`。
 
 ## P1-01：共同确认模型和输入契约
 
@@ -95,14 +212,6 @@
 - **依赖**：P1-02、P1-03、P1-04。
 - **风险**：缺任一负载、seed、速度门限、环境或原始证据时只能判 `NOT_VERIFIED`；
   P1-A 失败不得直接触发 C 路线。
-
-## 其他同学的准备任务
-
-| 同学 | 当前可做 | 交付路径 | 不得提前做 |
-|---|---|---|---|
-| 深度学习通感算同学 | 审查分类枚举；设计数据划分、故障矩阵和 Agent I/O | `04_classification/**`、`09_test_agent/**` 的设计说明 | 分类训练、正式 P2/P3 结果和 Agent 主体 |
-| 计算机软件同学 | 验证 Mock；设计配置、结果索引、错误状态和报告字段 | `configs/**`、`07_app/**`、`06_validation/reports/**` 的设计说明 | 完整 App、把 Mock 当结果 |
-| 嵌入式 Linux 同学 | 设计 C 类型、回放、构建、异常和资源测试清单 | `08_sil/**` 的设计说明 | Observer 移植、SIL 性能结论 |
 
 ## 阶段声明
 
