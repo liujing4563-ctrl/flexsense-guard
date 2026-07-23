@@ -33,11 +33,14 @@
 - [`acceptance_matrix.md`](03_validation/acceptance_matrix.md)：P1/P2/P3 子门和集成验收矩阵
 - [`metric_definitions.md`](03_validation/metric_definitions.md)：指标公式、单位和聚合规则
 - [`evidence_management.md`](03_validation/evidence_management.md)：最小公共 Envelope、阶段化报告、结果目录和证据有效性
+- [`specification_verification_matrix.md`](03_validation/specification_verification_matrix.md)：规范真人审查责任、证据和待确认项
 - [`probe_results.md`](03_validation/probe_results.md)：技术探针执行记录
 
 ## `04_collaboration`：职责与协作交付
 
 - [`team_responsibilities.md`](04_collaboration/team_responsibilities.md)：同学间职责边界
+- [`team_parallel_preparation_plan.md`](04_collaboration/team_parallel_preparation_plan.md)：P1 阻断期间五位同学可并行开展的准备工作
+- [`module_work_package_template.md`](04_collaboration/module_work_package_template.md)：模块输入、输出、依赖、验收和状态统一模板
 - [`issue_backlog.md`](04_collaboration/issue_backlog.md)：阶段任务映射
 - [`git_workflow.md`](04_collaboration/git_workflow.md)：分支与 PR 工作流
 - [`pr15_pr16_overlap_analysis.md`](04_collaboration/pr15_pr16_overlap_analysis.md)：两个 Draft PR 的文件重叠、顺序和回退风险
